@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>10 Tahun Reza & Sofi</title>
+<meta name="description" content="10 Tahun Reza & Sofi — sejak awal pacaran 1 September 2016, menikah 28 November 2020. Jalan-jalan dulu di lembah kenangan sebelum membuka undangan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============
+     Color:
+       --cream    #FAF3EA  base background
+       --rose     #E7B6BB  accent / warm pink (hills far, hearts)
+       --sage     #93AD8C  accent / hills near, foliage
+       --sage-dk  #5E7857  deep foliage / text on light
+       --gold     #D9A967  accent / sun, milestone markers
+       --ink      #4A3F3B  primary text, warm dark brown
+       --sky-top  #CFE3EC  pastel sky
+     Type:
+       Display : 'Fraunces' (romantic, high-contrast serif) — headlines, big numbers
+       Body    : 'Nunito' (rounded, warm, friendly) — paragraphs, UI
+       Utility : 'Space Mono' (monospace) — dates, counters, labels
+     Signature element:
+       "Lorong 10 Tahun" — pixel-art couple walking a countryside path at sunset,
+       leaving a trail of 10 heart-markers (one per year, 2016→2026) that light up
+       as the loading bar fills. This becomes the literal spine of the page: the
+       same path + year-markers reappear later as the "Perjalanan Kami" timeline.
+  ============================== */
+  :root{
+    --cream:#FAF3EA;
+    --rose:#E7B6BB;
+    --rose-dk:#C98A92;
+    --sage:#93AD8C;
+    --sage-dk:#5E7857;
+    --gold:#D9A967;
+    --ink:#4A3F3B;
+    --sky-top:#CFE3EC;
+    --sky-bot:#F6DCC8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Nunito', sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+  }
+  img{max-width:100%; display:block;}
+  :focus-visible{outline:3px solid var(--sage-dk); outline-offset:3px;}
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; line-height:1.15;}
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    color:var(--sage-dk);
+  }
+  button{font-family:inherit; cursor:pointer;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  }
+
+  /* ============ INTRO / LOADING SCENE ============ */
+  #intro{
+    position:fixed; inset:0; z-index:100;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bot) 62%, #EAC9A6 100%);
+    overflow:hidden;
+    transition:opacity .9s ease, visibility .9s ease;
+  }
+  #intro.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  .sun{
+    position:absolute; top:12%; left:50%; transform:translateX(-50%);
+    width:64px; height:64px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #FCEBC9, var(--gold) 70%);
+    box-shadow:0 0 40px 12px rgba(217,169,103,.35);
+  }
+  .cloud{
+    position:absolute; background:#fff; opacity:.75; border-radius:40px;
+    filter:drop-shadow(0 2px 0 rgba(0,0,0,.03));
+  }
+  .cloud::before, .cloud::after{
+    content:""; position:absolute; background:inherit; border-radius:40px;
+  }
+  .cloud1{ width:70px; height:22px; top:18%; left:14%; animation:driftCloud 40s linear infinite; }
+  .cloud1::before{ width:38px; height:38px; top:-16px; left:8px; }
+  .cloud2{ width:54px; height:18px; top:28%; right:10%; animation:driftCloud 55s linear infinite reverse; }
+  .cloud2::before{ width:30px; height:30px; top:-12px; left:6px; }
+  @keyframes driftCloud{ from{transform:translateX(0);} to{transform:translateX(120px);} }
+
+  .hills{ position:absolute; left:0; right:0; bottom:0; width:100%; }
+  .hill-back{
+    position:absolute; bottom:120px; left:0; width:100%; height:160px;
+    background:var(--rose);
+    clip-path:polygon(0% 100%,0% 40%,8% 30%,16% 45%,26% 20%,36% 42%,48% 15%,60% 40%,72% 22%,84% 44%,94% 25%,100% 40%,100% 100%);
+    opacity:.8;
+  }
+  .hill-front{
+    position:absolute; bottom:80px; left:0; width:100%; height:140px;
+    background:var(--sage);
+    clip-path:polygon(0% 100%,0% 55%,10% 35%,22% 55%,34% 30%,46% 55%,58% 25%,70% 55%,82% 32%,92% 55%,100% 40%,100% 100%);
+  }
+  .bush{
+    position:absolute; bottom:76px; width:14px; height:14px; background:var(--sage-dk);
+    box-shadow:14px 0 var(--sage-dk), 7px -7px var(--sage-dk), -14px 3px var(--sage-dk);
+    image-rendering:pixelated;
+  }
+
+  .path{
+    position:absolute; bottom:0; left:0; width:100%; height:80px;
+    background:repeating-linear-gradient(90deg, #E9CBA6 0 24px, #E3C296 24px 48px);
+    background-size:200% 100%;
+    animation:walkPath 1.1s linear infinite;
+  }
+  #intro.paused .path,
+  #intro.paused .walker,
+  #intro.paused .bush{ animation-play-state:paused; }
+  @keyframes walkPath{ from{background-position:0 0;} to{background-position:-48px 0;} }
+
+  .walker-track{
+    position:absolute; bottom:0; left:0; right:0; height:80px;
+  }
+  .walker{
+    position:absolute; bottom:34px; left:0%; transform:translateX(-50%);
+    width:56px; height:72px;
+    image-rendering:pixelated;
+    transition:left .22s linear;
+  }
+  .walker-bob{
+    width:100%; height:100%;
+    animation:bob .5s ease-in-out infinite alternate;
+  }
+  @keyframes bob{ from{transform:translateY(0);} to{transform:translateY(-3px);} }
+  .walker svg{ width:100%; height:100%; shape-rendering:crispEdges; }
+  .leg{ animation:legSwing .55s steps(2) infinite; transform-origin:top center; }
+  .leg.right{ animation-delay:.275s; }
+  @keyframes legSwing{ 0%,100%{ transform:rotate(14deg); } 50%{ transform:rotate(-14deg); } }
+
+  .walker-name{
+    position:absolute; top:4px;
+    font-family:'Space Mono', monospace; font-weight:700; font-size:.6rem;
+    color:var(--ink); background:#FBF2E4; border:1.5px solid var(--ink); border-radius:6px;
+    padding:1px 5px; white-space:nowrap; box-shadow:0 2px 0 rgba(74,63,59,.18);
+  }
+  .walker-name.left{ right:100%; margin-right:6px; }
+  .walker-name.right{ left:100%; margin-left:6px; }
+
+  .checkpoint.cp-npc{ image-rendering:pixelated; }
+  .checkpoint.cp-npc svg{ width:80px; height:104px; shape-rendering:crispEdges; display:block; }
+  .npc-label{
+    position:absolute; top:8px;
+    font-family:'Space Mono', monospace; font-weight:700; font-size:.6rem;
+    color:var(--ink); background:#FBF2E4; border:1.5px solid var(--ink); border-radius:6px;
+    padding:1px 5px; white-space:nowrap; box-shadow:0 2px 0 rgba(74,63,59,.18);
+  }
+  .npc-label.left{ right:100%; margin-right:6px; }
+  .npc-label.right{ left:100%; margin-left:6px; }
+
+  .marker{
+    position:absolute; bottom:78px;
+    font-family:'Space Mono', monospace; font-size:.62rem; font-weight:700;
+    color:var(--rose-dk); opacity:0; transform:translateY(6px) scale(.6);
+    transition:opacity .4s ease, transform .4s ease;
+    text-align:center;
+  }
+  .marker.on{ opacity:1; transform:translateY(0) scale(1); }
+  .marker .heart{ display:block; font-size:.9rem; line-height:1; }
+
+  .intro-copy{
+    position:relative; z-index:5; text-align:center; color:var(--ink);
+    padding:0 24px 26px;
+  }
+  .intro-copy .eyebrow{ color:#7a5b47; }
+  .intro-copy h1{
+    font-size:clamp(1.6rem, 6vw, 2.4rem);
+    margin:.35rem 0 .2rem;
+  }
+  .intro-copy .sub{ font-size:.95rem; opacity:.85; margin-bottom:1rem; }
+
+  .loadbar-wrap{
+    width:min(280px, 70vw); height:8px; border-radius:6px;
+    background:rgba(255,255,255,.55); margin:0 auto 8px; overflow:hidden;
+    border:1px solid rgba(74,63,59,.15);
+  }
+  .loadbar{ height:100%; width:0%; background:linear-gradient(90deg, var(--rose-dk), var(--gold)); transition:width .15s linear; }
+  .loadpct{ font-family:'Space Mono', monospace; font-size:.78rem; color:#7a5b47; }
+
+  #openBtn{
+    margin-top:16px; padding:13px 30px; border:none; border-radius:40px;
+    background:var(--ink); color:var(--cream); font-weight:700; font-size:.95rem;
+    letter-spacing:.02em; box-shadow:0 8px 18px rgba(74,63,59,.25);
+    opacity:0; transform:translateY(10px); pointer-events:none;
+    transition:opacity .5s ease, transform .5s ease, background .2s ease;
+  }
+  #openBtn.ready{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  #openBtn:hover{ background:var(--sage-dk); }
+
+  /* ============ EXPLORE: village scene with checkpoints ============ */
+  #explore{
+    position:relative; height:100svh; min-height:520px; overflow:hidden;
+    background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bot) 68%, #EAC9A6 100%);
+  }
+  .expl-backdrop{ position:absolute; inset:0; }
+  .expl-backdrop .sun{ top:8%; }
+  .expl-backdrop .hill-back{ bottom:96px; }
+  .expl-backdrop .hill-front{ bottom:64px; }
+
+  .expl-hud{
+    position:absolute; top:16px; left:16px; right:16px; z-index:6;
+    display:flex; justify-content:space-between; align-items:flex-start; pointer-events:none;
+  }
+  .mission-box{
+    pointer-events:auto; background:#FBF2E4; border:2px solid var(--ink); border-radius:10px;
+    padding:12px 16px; box-shadow:0 6px 0 rgba(74,63,59,.18); max-width:230px;
+  }
+  .mission-box p{ font-family:'Space Mono', monospace; font-weight:700; font-size:.78rem; margin-bottom:8px; }
+  .mission-box ul{ list-style:none; }
+  .mission-box li{ display:flex; align-items:center; gap:8px; font-size:.78rem; margin-bottom:6px; opacity:.85; }
+  .mission-box li.done{ opacity:.5; text-decoration:line-through; }
+  .mission-box .chk{
+    width:14px; height:14px; border:2px solid var(--ink); border-radius:3px; flex-shrink:0; background:#fff;
+  }
+  .mission-box li.done .chk{ background:var(--sage-dk); border-color:var(--sage-dk); }
+  .heart-counter{
+    pointer-events:auto; background:#FBF2E4; border:2px solid var(--ink); border-radius:10px;
+    padding:8px 14px; font-family:'Space Mono', monospace; font-weight:700; font-size:.85rem;
+    box-shadow:0 6px 0 rgba(74,63,59,.18); color:var(--rose-dk);
+  }
+  .hud-right{ display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+  .music-toggle{
+    pointer-events:auto; width:38px; height:38px; border-radius:50%;
+    background:#FBF2E4; border:2px solid var(--ink); box-shadow:0 6px 0 rgba(74,63,59,.18);
+    display:flex; align-items:center; justify-content:center; font-size:1.05rem; cursor:pointer;
+  }
+  .music-toggle:active{ transform:translateY(3px); box-shadow:0 3px 0 rgba(74,63,59,.18); }
+
+  .expl-viewport{ position:absolute; inset:0; overflow:hidden; }
+  .expl-track{
+    position:absolute; bottom:0; left:0; height:200px; width:2500px;
+  }
+  .ground-path{
+    position:absolute; bottom:0; left:0; width:100%; height:70px;
+    background:repeating-linear-gradient(90deg, #E9CBA6 0 24px, #E3C296 24px 48px);
+  }
+  .expl-track .bush{ bottom:66px; }
+
+  .checkpoint{ position:absolute; bottom:66px; display:flex; flex-direction:column; align-items:center; }
+  .cp-sign{
+    background:#FBF2E4; border:2px solid var(--ink); border-radius:8px; padding:8px 10px;
+    font-family:'Space Mono', monospace; font-size:.66rem; font-weight:700; text-align:center;
+    box-shadow:0 4px 0 rgba(74,63,59,.18); line-height:1.4; white-space:nowrap;
+  }
+  .cp-post{ width:6px; height:34px; background:var(--sage-dk); margin:0 auto; }
+  .cp-bubble{
+    position:absolute; top:-34px; width:24px; height:24px; border-radius:50% 50% 50% 4px;
+    background:var(--rose-dk); color:#fff; display:none; align-items:center; justify-content:center;
+    font-weight:800; font-size:.85rem; animation:bubbleBounce 1s ease-in-out infinite;
+  }
+  .checkpoint.inrange .cp-bubble{ display:flex; }
+  .checkpoint.visited .cp-sign{ opacity:.55; }
+  .checkpoint.visited .cp-bubble{ display:none; }
+  @keyframes bubbleBounce{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-5px);} }
+
+  .expl-walker{
+    position:absolute; bottom:66px; left:40px; transform:translateX(-50%);
+    width:56px; height:72px; image-rendering:pixelated;
+  }
+  .walker-flip{ width:100%; height:100%; }
+  .expl-walker svg{ width:100%; height:100%; shape-rendering:crispEdges; }
+  .expl-walker .walker-bob{ width:100%; height:100%; }
+  .expl-walker.walking .walker-bob{ animation:bob .35s ease-in-out infinite alternate; }
+  .expl-walker .leg{ animation:none; }
+  .expl-walker.walking .leg{ animation:legSwing .35s steps(2) infinite; transform-origin:top center; }
+
+  .nav-arrow{
+    position:absolute; bottom:24px; z-index:6; width:52px; height:52px; border-radius:50%;
+    border:none; background:var(--gold); color:#fff; font-size:1.4rem; font-weight:800;
+    box-shadow:0 6px 0 rgba(74,63,59,.2);
+  }
+  .nav-arrow:active{ transform:translateY(3px); box-shadow:0 3px 0 rgba(74,63,59,.2); }
+  .nav-arrow.left{ left:18px; }
+  .nav-arrow.right{ right:18px; }
+
+  .expl-hint{
+    position:absolute; bottom:32px; left:50%; transform:translateX(-50%); z-index:5;
+    font-family:'Space Mono', monospace; font-size:.68rem; color:#fff; text-align:center;
+    text-shadow:0 1px 3px rgba(0,0,0,.35); width:220px; pointer-events:none;
+  }
+
+  .interact-btn{
+    position:absolute; bottom:92px; left:50%; transform:translateX(-50%); z-index:7;
+    padding:10px 22px; border:none; border-radius:30px; background:var(--ink); color:#fff;
+    font-weight:700; font-size:.85rem; box-shadow:0 8px 18px rgba(74,63,59,.3);
+    opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+  }
+  .interact-btn.show{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(-4px); }
+
+  .cp-panel{
+    position:absolute; inset:0; z-index:9; display:flex; align-items:flex-end; justify-content:center;
+    background:rgba(74,63,59,.35); opacity:0; pointer-events:none; transition:opacity .3s ease;
+  }
+  .cp-panel.show{ opacity:1; pointer-events:auto; }
+  .cp-panel-card{
+    position:relative; width:100%; max-width:520px; background:#fff; border-radius:22px 22px 0 0;
+    padding:30px 26px 34px; transform:translateY(20px); transition:transform .3s ease;
+    max-height:78%; overflow-y:auto;
+  }
+  .cp-panel.show .cp-panel-card{ transform:translateY(0); }
+  .cp-close{
+    position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%;
+    border:none; background:var(--cream); font-size:1rem; color:var(--ink);
+  }
+  .cp-panel-card .eyebrow{ margin-bottom:6px; }
+  .cp-panel-card h3{ font-size:1.3rem; margin-bottom:12px; }
+  .cp-panel-card p{ font-size:.95rem; line-height:1.7; margin-bottom:10px; opacity:.85; }
+  .cp-panel-card .map-btn{ margin-top:8px; }
+
+  .letter{
+    background:var(--cream); border:1.5px solid rgba(74,63,59,.15); border-radius:12px;
+    padding:2px 14px; margin-bottom:10px; overflow:hidden;
+  }
+  .letter summary{
+    cursor:pointer; list-style:none; padding:12px 0; font-weight:700; font-size:.95rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .letter summary::-webkit-details-marker{ display:none; }
+  .letter summary::after{ content:"＋"; font-size:1rem; color:var(--ink); opacity:.5; }
+  .letter[open] summary::after{ content:"－"; }
+  .letter p{ margin:0 0 14px; opacity:.85; }
+
+  .memory-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin:14px 0;
+  }
+  .mem-card{
+    position:relative; aspect-ratio:1/1; border:none; border-radius:12px; cursor:pointer;
+    background:var(--sage-dk); padding:0; perspective:600px;
+  }
+  .mem-face{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    border-radius:12px; font-size:1.6rem; backface-visibility:hidden;
+    transition:transform .35s ease;
+  }
+  .mem-back{ background:var(--sage-dk); color:#FBF2E4; font-family:'Fraunces', serif; }
+  .mem-front{ background:#FBF2E4; border:2px solid var(--ink); transform:rotateY(180deg); }
+  .mem-card.flipped .mem-back, .mem-card.matched .mem-back{ transform:rotateY(180deg); }
+  .mem-card.flipped .mem-front, .mem-card.matched .mem-front{ transform:rotateY(0); }
+  .mem-card.matched .mem-front{ opacity:.55; }
+  .acara-line{
+    background:var(--cream); border-radius:10px; padding:9px 12px; margin-bottom:8px !important;
+    font-size:.88rem !important; opacity:1 !important; animation:fadeUpSm .4s ease both;
+  }
+  @keyframes fadeUpSm{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .menu-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:6px; }
+  .menu-row{
+    display:flex; align-items:center; gap:14px; text-align:left; width:100%;
+    background:#fff; border:1px solid rgba(74,63,59,.1); border-radius:14px; padding:14px 16px;
+    box-shadow:0 3px 0 rgba(74,63,59,.08); cursor:pointer; font-family:inherit;
+  }
+  .menu-row:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(74,63,59,.08); }
+  .menu-ico{ font-size:1.5rem; flex-shrink:0; }
+  .menu-txt{ display:flex; flex-direction:column; }
+  .menu-title{ font-weight:800; font-size:1rem; color:var(--ink); }
+  .menu-sub{ font-size:.82rem; color:var(--ink); opacity:.65; }
+
+  .menu-back{
+    background:none; border:none; color:var(--sage-dk); font-weight:700; font-size:.85rem;
+    margin-bottom:10px; cursor:pointer; font-family:inherit; padding:0;
+  }
+
+  .cp-gallery{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:6px; }
+  .cp-gallery .slot{
+    aspect-ratio:1/1; border-radius:12px; border:2px dashed var(--rose-dk);
+    background:repeating-linear-gradient(135deg, #fff 0 10px, #FBEEE3 10px 20px);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    color:var(--rose-dk); font-size:.66rem; padding:6px; font-family:'Space Mono', monospace;
+  }
+
+  @media (max-width:560px){
+    .mission-box{ max-width:170px; padding:9px 12px; }
+    .mission-box li{ font-size:.68rem; }
+    .expl-hint{ display:none; }
+  }
+
+  section{ padding:74px 22px; max-width:760px; margin:0 auto; }
+  .divider{
+    width:100%; max-width:760px; margin:0 auto; height:52px;
+    background:
+      radial-gradient(circle at 10px 26px, var(--rose) 5px, transparent 6px),
+      radial-gradient(circle at 30px 26px, var(--sage) 5px, transparent 6px),
+      radial-gradient(circle at 50px 26px, var(--gold) 5px, transparent 6px);
+    background-repeat:repeat-x; background-size:20px 52px;
+    opacity:.6;
+  }
+
+  /* Hero */
+  .hero{
+    text-align:center; padding-top:64px;
+    background:linear-gradient(180deg, var(--sky-top), var(--cream) 85%);
+  }
+  .hero .eyebrow{ margin-bottom:10px; }
+  .hero h1{ font-size:clamp(2.2rem, 8vw, 3.6rem); }
+  .hero .amp{ color:var(--rose-dk); font-style:italic; }
+  .hero .years{
+    display:inline-flex; align-items:baseline; gap:10px; margin:22px 0 6px;
+    font-family:'Fraunces', serif;
+  }
+  .years .num{ font-size:clamp(3.4rem, 16vw, 5.5rem); color:var(--sage-dk); font-weight:600; }
+  .years .lbl{ font-family:'Space Mono', monospace; font-size:.85rem; color:var(--ink); text-align:left; opacity:.75; }
+  .hero .datebox{
+    display:inline-block; margin-top:22px; padding:14px 26px; background:#fff;
+    border-radius:16px; box-shadow:0 10px 26px rgba(74,63,59,.08);
+    font-family:'Space Mono', monospace; letter-spacing:.05em;
+  }
+  .hero .names-sub{ margin-top:20px; font-size:1rem; opacity:.8; }
+
+  .card{ background:#fff; border-radius:20px; padding:34px 28px; box-shadow:0 14px 32px rgba(74,63,59,.06); }
+
+  /* Sambutan */
+  .sambutan p{ font-size:1.05rem; line-height:1.85; margin-top:14px; }
+  .sambutan .quote{
+    font-family:'Fraunces', serif; font-style:italic; font-size:1.3rem;
+    color:var(--sage-dk); text-align:center; margin:26px 0; line-height:1.5;
+  }
+
+  /* Timeline */
+  .timeline-head{ text-align:center; margin-bottom:38px; }
+  .timeline{ position:relative; padding-left:26px; }
+  .timeline::before{
+    content:""; position:absolute; left:6px; top:6px; bottom:6px; width:2px;
+    background:repeating-linear-gradient(180deg, var(--rose) 0 6px, transparent 6px 12px);
+  }
+  .tl-item{ position:relative; padding:0 0 30px 22px; }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{
+    content:"♥"; position:absolute; left:-31px; top:-2px; width:20px; height:20px;
+    display:flex; align-items:center; justify-content:center; font-size:.7rem;
+    color:#fff; background:var(--rose-dk); border-radius:50%;
+  }
+  .tl-year{ font-family:'Space Mono', monospace; font-weight:700; color:var(--sage-dk); font-size:.85rem; }
+  .tl-item h3{ font-size:1.15rem; margin:.2rem 0 .3rem; }
+  .tl-item p{ font-size:.95rem; opacity:.8; line-height:1.6; }
+  .tl-edit{ font-size:.72rem; color:var(--rose-dk); opacity:.75; }
+
+  /* Acara */
+  .acara-grid{ display:grid; gap:16px; margin-top:24px; }
+  .acara-row{ display:flex; gap:14px; align-items:flex-start; padding:16px 0; border-bottom:1px dashed rgba(74,63,59,.15); }
+  .acara-row:last-child{ border-bottom:none; }
+  .acara-ico{
+    width:40px; height:40px; border-radius:12px; background:var(--sage);
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
+  }
+  .acara-row h3{ font-size:1rem; margin-bottom:2px; }
+  .acara-row p{ font-size:.92rem; opacity:.8; }
+  .map-btn{
+    margin-top:18px; display:inline-block; padding:11px 22px; border-radius:30px;
+    background:var(--sage-dk); color:#fff; text-decoration:none; font-size:.9rem; font-weight:700;
+  }
+
+  /* Galeri */
+  .gallery-head{ text-align:center; margin-bottom:26px; }
+  .gallery{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+  .gallery .slot{
+    aspect-ratio:1/1; border-radius:14px; border:2px dashed var(--rose-dk);
+    background:repeating-linear-gradient(135deg, #fff 0 10px, #FBEEE3 10px 20px);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    color:var(--rose-dk); font-size:.72rem; padding:6px; font-family:'Space Mono', monospace;
+  }
+  .gallery img{ width:100%; height:100%; object-fit:cover; border-radius:14px; }
+
+  /* Ucapan */
+  .ucapan{ text-align:center; }
+  .ucapan textarea{
+    width:100%; margin-top:18px; padding:14px; border-radius:14px; border:1px solid rgba(74,63,59,.2);
+    font-family:'Nunito', sans-serif; font-size:.95rem; resize:vertical; min-height:90px;
+  }
+  .ucapan-actions{ display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+  .btn-primary, .btn-secondary{
+    padding:12px 24px; border-radius:30px; font-weight:700; font-size:.9rem; border:none;
+  }
+  .btn-primary{ background:var(--sage-dk); color:#fff; }
+  .btn-secondary{ background:transparent; color:var(--ink); border:1.5px solid var(--ink); }
+  .ucapan-note{ font-size:.78rem; opacity:.6; margin-top:10px; }
+
+  footer{
+    text-align:center; padding:50px 22px 40px; color:var(--ink);
+    background:linear-gradient(180deg, var(--cream), #F3E4D2);
+  }
+  footer .amp{ color:var(--rose-dk); font-style:italic; }
+  footer .credit{ font-size:.72rem; opacity:.55; margin-top:18px; font-family:'Space Mono', monospace; }
+
+  @media (max-width:520px){
+    .gallery{ grid-template-columns:repeat(2, 1fr); }
+    section{ padding:56px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ INTRO: pixel-art walk through 10 tahun ============ -->
+<div id="intro" role="dialog" aria-label="Halaman pembuka undangan">
+  <div class="sun"></div>
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+
+  <div class="hills">
+    <div class="hill-back"></div>
+    <div class="hill-front"></div>
+    <div class="bush" style="left:18%;"></div>
+    <div class="bush" style="left:52%;"></div>
+    <div class="bush" style="left:78%;"></div>
+
+    <!-- 10 year markers along the path, lit up as the walker passes them -->
+    <div class="marker" data-x="4" style="left:4%;"><span class="heart">♥</span>2016</div>
+    <div class="marker" data-x="14" style="left:14%;"><span class="heart">♥</span>2017</div>
+    <div class="marker" data-x="24" style="left:24%;"><span class="heart">♥</span>2018</div>
+    <div class="marker" data-x="34" style="left:34%;"><span class="heart">♥</span>2019</div>
+    <div class="marker" data-x="44" style="left:44%;"><span class="heart">♥</span>2020</div>
+    <div class="marker" data-x="54" style="left:54%;"><span class="heart">♥</span>2021</div>
+    <div class="marker" data-x="64" style="left:64%;"><span class="heart">♥</span>2022</div>
+    <div class="marker" data-x="74" style="left:74%;"><span class="heart">♥</span>2023</div>
+    <div class="marker" data-x="84" style="left:84%;"><span class="heart">♥</span>2024</div>
+    <div class="marker" data-x="94" style="left:94%;"><span class="heart">♥</span>2025</div>
+
+    <div class="path"></div>
+
+    <div class="walker-track">
+      <div class="walker" id="walker" aria-hidden="true">
+        <div class="walker-name left">Clemira</div>
+        <div class="walker-name right">Kinza</div>
+        <div class="walker-bob">
+          <svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg">
+            <!-- Sofi / Clemira -->
+            <g>
+              <rect x="4" y="6" width="8" height="8" fill="#4A3F3B"/>
+              <rect x="3" y="14" width="10" height="14" fill="#B85C38"/>
+              <rect class="leg left" x="4" y="28" width="4" height="8" fill="#4A3F3B"/>
+              <rect class="leg right" x="9" y="28" width="4" height="8" fill="#7a5b47"/>
+            </g>
+            <!-- clasped hands -->
+            <rect x="14" y="18" width="6" height="4" fill="#D9A967"/>
+            <!-- Reza / Kinza -->
+            <g>
+              <rect x="21" y="4" width="8" height="8" fill="#4A3F3B"/>
+              <rect x="20" y="12" width="10" height="16" fill="#2C3E60"/>
+              <rect class="leg left" x="21" y="28" width="4" height="8" fill="#4A3F3B"/>
+              <rect class="leg right" x="26" y="28" width="4" height="8" fill="#5E7857"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro-copy">
+    <p class="eyebrow">Menyusuri Lorong 10 Tahun</p>
+    <h1>Reza &amp; Sofi</h1>
+    <p class="sub">Jalan-jalan dulu sebentar menyusuri setiap tahunnya, sebelum sampai di undangan kami.</p>
+    <div class="loadbar-wrap"><div class="loadbar" id="loadbar"></div></div>
+    <p class="loadpct" id="loadpct">Menyiapkan kenangan… 0%</p>
+    <button id="openBtn">Buka Undangan Kami →</button>
+  </div>
+</div>
+
+<!-- ============ EXPLORE: jalan-jalan ke desa kenangan ============ -->
+<section id="explore" aria-label="Jelajahi desa kenangan Reza dan Sofi">
+  <div class="expl-backdrop">
+    <div class="sun"></div>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="hill-back"></div>
+    <div class="hill-front"></div>
+  </div>
+
+  <div class="expl-hud">
+    <div class="mission-box">
+      <p>Misi Kamu</p>
+      <ul id="missionList">
+        <li data-cp="0"><span class="chk"></span> Buka kotak surat</li>
+        <li data-cp="1"><span class="chk"></span> Main papan acara</li>
+        <li data-cp="2"><span class="chk"></span> Lihat perjalanan 10 tahun</li>
+        <li data-cp="3"><span class="chk"></span> Temui Reza & Sofi</li>
+      </ul>
+    </div>
+    <div class="hud-right">
+      <div class="heart-counter">♥ <span id="heartCount">0</span>/4</div>
+      <button class="music-toggle" id="musicToggle" title="Nyala/matikan musik" aria-label="Nyala/matikan musik">🔈</button>
+    </div>
+  </div>
+
+  <!-- Taruh file musik lo sendiri di sini dengan nama bgm.mp3 (satu folder sama index.html) -->
+  <audio id="bgm" src="bgm.mp3" loop preload="none"></audio>
+
+  <div class="expl-viewport">
+    <div class="expl-track" id="exploreTrack">
+      <div class="ground-path"></div>
+      <div class="bush" style="left:70px;"></div>
+      <div class="bush" style="left:340px;"></div>
+      <div class="bush" style="left:610px;"></div>
+      <div class="bush" style="left:900px;"></div>
+      <div class="bush" style="left:1180px;"></div>
+      <div class="bush" style="left:1460px;"></div>
+      <div class="bush" style="left:1740px;"></div>
+      <div class="bush" style="left:2020px;"></div>
+      <div class="bush" style="left:2280px;"></div>
+
+      <div class="checkpoint" data-index="0" data-x="260" style="left:260px;">
+        <div class="cp-bubble">!</div>
+        <div class="cp-sign">📦<br>Kotak<br>Surat</div>
+        <div class="cp-post"></div>
+      </div>
+      <div class="checkpoint" data-index="1" data-x="780" style="left:780px;">
+        <div class="cp-bubble">!</div>
+        <div class="cp-sign">📋<br>Papan<br>Acara</div>
+        <div class="cp-post"></div>
+      </div>
+      <div class="checkpoint" data-index="2" data-x="1400" style="left:1400px;">
+        <div class="cp-bubble">!</div>
+        <div class="cp-sign">🗓️<br>Perjalanan<br>10 Tahun</div>
+        <div class="cp-post"></div>
+      </div>
+      <!-- Reza & Sofi — versi dewasa, orang tua dari Clemira & Kinza. Karakter INI sekaligus jadi checkpoint-nya (papan diganti karakter) -->
+      <div class="checkpoint cp-npc" data-index="3" data-x="2050" style="left:2050px;">
+        <div class="cp-bubble">!</div>
+        <div class="npc-label left">Reza</div>
+        <div class="npc-label right">Sofi</div>
+        <svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg">
+          <!-- Reza (bapak) -->
+          <g>
+            <rect x="4" y="6" width="8" height="8" fill="#9C9690"/>
+            <rect x="3" y="14" width="10" height="14" fill="#8B6F47"/>
+            <rect x="4" y="28" width="4" height="8" fill="#4A3F3B"/>
+            <rect x="9" y="28" width="4" height="8" fill="#4A3F3B"/>
+          </g>
+          <!-- clasped hands -->
+          <rect x="14" y="18" width="6" height="4" fill="#D9A967"/>
+          <!-- Sofi (ibu) -->
+          <g>
+            <rect x="21" y="6" width="8" height="8" fill="#9C9690"/>
+            <rect x="20" y="14" width="10" height="16" fill="#C98A92"/>
+            <rect x="21" y="30" width="4" height="6" fill="#4A3F3B"/>
+            <rect x="26" y="30" width="4" height="6" fill="#4A3F3B"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="expl-walker" id="exploWalker" aria-hidden="true">
+        <div class="walker-name left">Clemira</div>
+        <div class="walker-name right">Kinza</div>
+        <div class="walker-flip" id="walkerFlip">
+          <div class="walker-bob">
+            <svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg">
+              <g>
+                <rect x="4" y="6" width="8" height="8" fill="#4A3F3B"/>
+                <rect x="3" y="14" width="10" height="14" fill="#B85C38"/>
+                <rect class="leg left" x="4" y="28" width="4" height="8" fill="#4A3F3B"/>
+                <rect class="leg right" x="9" y="28" width="4" height="8" fill="#7a5b47"/>
+              </g>
+              <rect x="14" y="18" width="6" height="4" fill="#D9A967"/>
+              <g>
+                <rect x="21" y="4" width="8" height="8" fill="#4A3F3B"/>
+                <rect x="20" y="12" width="10" height="16" fill="#2C3E60"/>
+                <rect class="leg left" x="21" y="28" width="4" height="8" fill="#4A3F3B"/>
+                <rect class="leg right" x="26" y="28" width="4" height="8" fill="#5E7857"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="nav-arrow left" id="navLeft" aria-label="Gerak ke kiri">‹</button>
+  <button class="nav-arrow right" id="navRight" aria-label="Gerak ke kanan">›</button>
+  <p class="expl-hint">Tekan ‹ › atau geser layar untuk jalan. Tekan tombol saat muncul tanda !</p>
+  <button id="interactBtn" class="interact-btn">Lihat Detail</button>
+
+  <div id="cpPanel" class="cp-panel">
+    <div class="cp-panel-card">
+      <button class="cp-close" id="cpClose" aria-label="Tutup">✕</button>
+      <div id="cpPanelBody"></div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var intro = document.getElementById('intro');
+  var bar = document.getElementById('loadbar');
+  var pct = document.getElementById('loadpct');
+  var openBtn = document.getElementById('openBtn');
+  var markers = document.querySelectorAll('.marker');
+  var introDone = false;
+
+  var walker = document.getElementById('walker');
+  var progress = 0;
+  var timer = setInterval(function(){
+    progress += Math.random() * 6 + 3;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(timer);
+      intro.classList.add('paused');
+      pct.textContent = 'Sudah 10 tahun, dan terus melangkah bersama ♥';
+      openBtn.classList.add('ready');
+    } else {
+      pct.textContent = 'Menyiapkan kenangan… ' + Math.floor(progress) + '%';
+    }
+    bar.style.width = progress + '%';
+
+    // walker's position along the path IS the progress — it visually
+    // walks past each year marker as it goes from 2016 towards 2025/today
+    walker.style.left = (2 + progress * 0.95) + '%';
+
+    // light up a year marker once the walker has passed its spot on the path
+    markers.forEach(function(m){
+      if (progress >= parseFloat(m.dataset.x)) m.classList.add('on');
+    });
+  }, 220);
+
+  openBtn.addEventListener('click', function(){
+    intro.classList.add('hide');
+    introDone = true;
+    document.title = 'Reza & Sofi — 10 Tahun Bersama';
+    setTimeout(function(){ intro.style.display = 'none'; }, 950);
+
+    // coba autoplay musik begitu user klik (klik ini terhitung "gesture" jadi browser izinin)
+    bgm.play().then(function(){
+      musicOn = true;
+      musicToggle.textContent = '🔊';
+    }).catch(function(){
+      // kalau browser tetap block, biarin user nyalain manual lewat tombol
+      musicOn = false;
+      musicToggle.textContent = '🔈';
+    });
+  });
+
+  // ============ MUSIK: nyala/matikan (butuh file bgm.mp3 di folder yang sama) ============
+  var bgm = document.getElementById('bgm');
+  var musicToggle = document.getElementById('musicToggle');
+  var musicOn = false;
+  musicToggle.addEventListener('click', function(){
+    if (musicOn){
+      bgm.pause();
+      musicOn = false;
+      musicToggle.textContent = '🔈';
+    } else {
+      bgm.play().then(function(){
+        musicOn = true;
+        musicToggle.textContent = '🔊';
+      }).catch(function(){
+        musicToggle.textContent = '⚠️';
+        setTimeout(function(){ musicToggle.textContent = '🔈'; }, 1200);
+      });
+    }
+  });
+
+  // ============ EXPLORE: village scene with checkpoints ============
+  var track = document.getElementById('exploreTrack');
+  var walkerCharacter = document.getElementById('exploWalker');
+  var walkerFlip = document.getElementById('walkerFlip');
+  var checkpoints = Array.prototype.slice.call(document.querySelectorAll('.checkpoint'));
+  var interactBtn = document.getElementById('interactBtn');
+  var cpPanel = document.getElementById('cpPanel');
+  var cpPanelBody = document.getElementById('cpPanelBody');
+  var cpClose = document.getElementById('cpClose');
+  var heartCount = document.getElementById('heartCount');
+  var missionList = document.getElementById('missionList');
+
+  var TRACK_WIDTH = 2500;
+  var playerX = 40;
+  var visited = {};
+  var activeCp = null;
+  var SPEED = 240; // px per second while held
+  var holdDir = 0; // -1 left, 1 right, 0 idle
+  var rafId = null;
+  var lastTs = null;
+
+  // Content shown in the bottom-sheet panel for each checkpoint
+  var cpContent = [
+    // 0 - Kotak Surat
+    '<p class="eyebrow">Kotak Surat</p>' +
+    '<h3>Dua Surat, Satu Hati</h3>' +
+    '<details class="letter">' +
+      '<summary style="color:var(--rose-dk);">💌 Untuk Suamiku, Reza</summary>' +
+      '<p>Sepuluh tahun sudah kau jadi rumah untuk setiap resah, dan sandaran untuk setiap lelah. ' +
+      'Terima kasih sudah jadi suami yang sabar, yang selalu mengutamakan kami di atas dirimu sendiri. ' +
+      'Aku bersyukur, dari sekian banyak jalan takdir, Allah memilihmu untuk jadi pasangan hidupku. ' +
+      'Semoga aku bisa terus jadi istri yang bikin kau bangga — hari ini, dan sepuluh tahun lagi ke depan.</p>' +
+    '</details>' +
+    '<details class="letter">' +
+      '<summary style="color:var(--sage-dk);">💌 Untuk Istriku, Sofi</summary>' +
+      '<p>Terima kasih sudah jadi istri yang kuat sekaligus lembut, yang tetap berdiri di sampingku ' +
+      'waktu semua terasa berat. Sepuluh tahun ini, kamu bukan cuma pendamping, tapi juga rumah yang selalu ' +
+      'bikin aku ingin pulang. Aku bersyukur banget punya kamu — terima kasih untuk semua pengorbanan yang ' +
+      'kadang nggak kelihatan. Aku sayang kamu, sekarang dan seterusnya.</p>' +
+    '</details>' +
+    '<p style="font-style:italic; color:var(--ink); opacity:.7; margin-top:14px; font-size:.85rem;">"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan ' +
+    'untukmu pasangan… agar kamu cenderung dan merasa tenteram kepadanya."</p>',
+    // 1 - Papan Acara: dirender lewat renderAcaraGame(), bukan string statis
+    null,
+    // 2 - Perjalanan 10 Tahun: dirender lewat renderPerjalananMenu(), bukan string statis
+    null,
+    // 3 - Temui Reza & Sofi
+    '<p class="eyebrow">Reza &amp; Sofi</p>' +
+    '<h3>Terima Kasih Sudah Sampai Sini</h3>' +
+    '<p>Terima kasih sudah menjadi bagian dari cerita kami — sejak awal pacaran 1 September 2016, ' +
+    'sampai hari pernikahan kami 28 November 2020, hingga hari ini. Kami tunggu kehadiran ' +
+    'Bapak/Ibu/Saudara/i di acara syukuran kami di Bandung.</p>' +
+    '<p>Gulir ke bawah untuk lihat galeri foto dan kirim ucapan &amp; doa untuk kami ya 🤍</p>'
+  ];
+
+  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+  function renderPosition(){
+    var viewportW = document.getElementById('explore').clientWidth;
+    var offset = clamp(viewportW/2 - playerX, -(TRACK_WIDTH - viewportW), 0);
+    track.style.transform = 'translateX(' + offset + 'px)';
+    walkerCharacter.style.left = playerX + 'px';
+  }
+
+  function checkProximity(){
+    var nearest = null;
+    checkpoints.forEach(function(cp){
+      var idx = cp.dataset.index;
+      var x = parseFloat(cp.dataset.x);
+      var inRange = Math.abs(playerX - x) < 55;
+      cp.classList.toggle('inrange', inRange && !visited[idx]);
+      if (inRange && !visited[idx]) nearest = cp;
+    });
+    activeCp = nearest;
+    interactBtn.classList.toggle('show', !!nearest);
+  }
+
+  function tick(ts){
+    if (lastTs === null) lastTs = ts;
+    var dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    if (holdDir !== 0){
+      playerX = clamp(playerX + holdDir * SPEED * dt, 20, TRACK_WIDTH - 20);
+      walkerCharacter.classList.add('walking');
+      walkerFlip.style.transform = holdDir < 0 ? 'scaleX(-1)' : 'scaleX(1)';
+      renderPosition();
+      checkProximity();
+    } else {
+      walkerCharacter.classList.remove('walking');
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+
+  function startHold(dir){ holdDir = dir; }
+  function stopHold(dir){ if (holdDir === dir) holdDir = 0; }
+
+  function openPanel(index){
+    if (index === 1){
+      renderAcaraGame();
+    } else if (index === 2){
+      renderPerjalananMenu();
+    } else {
+      cpPanelBody.innerHTML = cpContent[index];
+    }
+    cpPanel.classList.add('show');
+  }
+  function closePanel(){ cpPanel.classList.remove('show'); }
+
+  // ---- Menu: Perjalanan 10 Tahun -> pilih Kisah Kami / Galeri Foto ----
+  function renderPerjalananMenu(){
+    cpPanelBody.innerHTML =
+      '<p class="eyebrow">Perjalanan 10 Tahun</p>' +
+      '<h3>Ada yang mau dilihat?</h3>' +
+      '<p style="margin-bottom:14px;">Pilih salah satu buat lihat lebih detail.</p>' +
+      '<div class="menu-list">' +
+        '<button class="menu-row" data-target="kisah">' +
+          '<span class="menu-ico">📖</span>' +
+          '<span class="menu-txt"><span class="menu-title">Kisah Kami</span><span class="menu-sub">Bagaimana semuanya bermula</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="galeri">' +
+          '<span class="menu-ico">📷</span>' +
+          '<span class="menu-txt"><span class="menu-title">Galeri Foto</span><span class="menu-sub">Beberapa potret kami</span></span>' +
+        '</button>' +
+      '</div>';
+
+    cpPanelBody.querySelectorAll('.menu-row').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if (btn.dataset.target === 'kisah') renderKisahKami();
+        else renderGaleriFoto();
+      });
+    });
+  }
+
+  function renderKisahKami(){
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<p class="eyebrow">Kisah Kami</p>' +
+      '<h3>10 Tahun, 10 Langkah</h3>' +
+      '<p><strong>1 Sep 2016</strong> — Awal cerita, hari pertama kami jadian.</p>' +
+      '<p><strong>2017–2019</strong> — Masa pacaran, saling memahami, jatuh-bangun bersama.</p>' +
+      '<p><strong>28 Nov 2020</strong> — Hari pernikahan, kami resmi menjadi suami istri.</p>' +
+      '<p><strong>2021–2025</strong> — Membangun rumah tangga dan kebiasaan kecil jadi kenangan besar.</p>' +
+      '<p>Dan hari ini, sepuluh tahun sejak awal cerita kami 🤍</p>';
+    document.getElementById('menuBack').addEventListener('click', renderPerjalananMenu);
+  }
+
+  function renderGaleriFoto(){
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<p class="eyebrow">Galeri Foto</p>' +
+      '<h3>Beberapa Potret Kami</h3>' +
+      '<div class="gallery cp-gallery">' +
+        '<div class="slot">Foto 1<br>menyusul</div>' +
+        '<div class="slot">Foto 2<br>menyusul</div>' +
+        '<div class="slot">Foto 3<br>menyusul</div>' +
+        '<div class="slot">Foto 4<br>menyusul</div>' +
+        '<div class="slot">Foto 5<br>menyusul</div>' +
+        '<div class="slot">Foto 6<br>menyusul</div>' +
+      '</div>';
+    document.getElementById('menuBack').addEventListener('click', renderPerjalananMenu);
+  }
+
+  // ---- Mini game: cocokkan kartu buat buka detail acara satu-satu ----
+  function renderAcaraGame(){
+    var pairs = [
+      { key:'tanggal', icon:'📅', detail:'Selasa, 1 September 2026, pukul 11.00–14.00 WIB' },
+      { key:'lokasi',  icon:'📍', detail:'Bandung, Jawa Barat — alamat lengkap menyusul' },
+      { key:'dress',   icon:'👗', detail:'Dress code: pastel / earth tone (opsional)' }
+    ];
+    var deck = pairs.concat(pairs).map(function(p, i){ return { id:i, key:p.key, icon:p.icon }; });
+    // shuffle
+    for (var i = deck.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = deck[i]; deck[i] = deck[j]; deck[j] = tmp;
+    }
+
+    cpPanelBody.innerHTML =
+      '<p class="eyebrow">Papan Acara</p>' +
+      '<h3>Cocokkan Kartu, Buka Detail</h3>' +
+      '<p style="margin-bottom:12px;">Tap dua kartu buat mencocokkan pasangannya. Tiap pasangan yang match bakal buka satu detail acara ⤵</p>' +
+      '<div class="memory-grid" id="memoryGrid"></div>' +
+      '<div class="acara-reveal" id="acaraReveal"></div>';
+
+    var grid = document.getElementById('memoryGrid');
+    var reveal = document.getElementById('acaraReveal');
+    var flipped = [];
+    var matchedKeys = {};
+    var lock = false;
+
+    deck.forEach(function(card){
+      var el = document.createElement('button');
+      el.className = 'mem-card';
+      el.dataset.id = card.id;
+      el.dataset.key = card.key;
+      el.dataset.icon = card.icon;
+      el.innerHTML = '<span class="mem-face mem-back">?</span><span class="mem-face mem-front">' + card.icon + '</span>';
+      el.addEventListener('click', function(){
+        if (lock || el.classList.contains('flipped') || el.classList.contains('matched')) return;
+        el.classList.add('flipped');
+        flipped.push(el);
+        if (flipped.length === 2){
+          lock = true;
+          var a = flipped[0], b = flipped[1];
+          if (a.dataset.key === b.dataset.key){
+            setTimeout(function(){
+              a.classList.add('matched'); b.classList.add('matched');
+              flipped = []; lock = false;
+              if (!matchedKeys[a.dataset.key]){
+                matchedKeys[a.dataset.key] = true;
+                var info = pairs.filter(function(p){ return p.key === a.dataset.key; })[0];
+                var line = document.createElement('p');
+                line.className = 'acara-line';
+                line.innerHTML = info.icon + ' ' + info.detail;
+                reveal.appendChild(line);
+                if (Object.keys(matchedKeys).length === pairs.length){
+                  var doneMsg = document.createElement('p');
+                  doneMsg.style.marginTop = '10px';
+                  doneMsg.innerHTML = '🎉 Semua detail terbuka! ';
+                  reveal.appendChild(doneMsg);
+                  var mapBtn = document.createElement('a');
+                  mapBtn.className = 'map-btn';
+                  mapBtn.href = 'https://www.google.com/maps/search/?api=1&query=Bandung';
+                  mapBtn.target = '_blank'; mapBtn.rel = 'noopener';
+                  mapBtn.textContent = 'Buka di Google Maps';
+                  reveal.appendChild(mapBtn);
+                }
+              }
+            }, 350);
+          } else {
+            setTimeout(function(){
+              a.classList.remove('flipped'); b.classList.remove('flipped');
+              flipped = []; lock = false;
+            }, 700);
+          }
+        }
+      });
+      grid.appendChild(el);
+    });
+  }
+
+  interactBtn.addEventListener('click', function(){
+    if (!activeCp) return;
+    var idx = parseInt(activeCp.dataset.index, 10);
+    openPanel(idx);
+    if (!visited[idx]){
+      visited[idx] = true;
+      activeCp.classList.add('visited');
+      activeCp.classList.remove('inrange');
+      var li = missionList.querySelector('li[data-cp="' + idx + '"]');
+      if (li) li.classList.add('done');
+      heartCount.textContent = Object.keys(visited).length;
+      interactBtn.classList.remove('show');
+    }
+  });
+  cpClose.addEventListener('click', closePanel);
+  cpPanel.addEventListener('click', function(e){ if (e.target === cpPanel) closePanel(); });
+
+  var navLeftBtn = document.getElementById('navLeft');
+  var navRightBtn = document.getElementById('navRight');
+  [['mousedown', -1], ['touchstart', -1]].forEach(function(pair){
+    navLeftBtn.addEventListener(pair[0], function(e){ e.preventDefault(); startHold(-1); }, {passive:false});
+  });
+  [['mousedown', 1], ['touchstart', 1]].forEach(function(pair){
+    navRightBtn.addEventListener(pair[0], function(e){ e.preventDefault(); startHold(1); }, {passive:false});
+  });
+  ['mouseup','mouseleave','touchend','touchcancel'].forEach(function(ev){
+    navLeftBtn.addEventListener(ev, function(){ stopHold(-1); });
+    navRightBtn.addEventListener(ev, function(){ stopHold(1); });
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (!introDone) return; // ignore while intro still up
+    if (e.key === 'ArrowLeft'){ e.preventDefault(); startHold(-1); }
+    if (e.key === 'ArrowRight'){ e.preventDefault(); startHold(1); }
+  });
+  document.addEventListener('keyup', function(e){
+    if (e.key === 'ArrowLeft') stopHold(-1);
+    if (e.key === 'ArrowRight') stopHold(1);
+  });
+
+  // swipe: press-and-drag to walk continuously in that direction
+  var touchStartX = null;
+  var explEl = document.getElementById('explore');
+  explEl.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, {passive:true});
+  explEl.addEventListener('touchmove', function(e){
+    if (touchStartX === null) return;
+    var dx = e.touches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 12) startHold(dx > 0 ? -1 : 1);
+  }, {passive:true});
+  explEl.addEventListener('touchend', function(){ touchStartX = null; holdDir = 0; });
+
+  window.addEventListener('resize', renderPosition);
+  renderPosition();
+  checkProximity();
+})();
+</script>
+
+</body>
+</html>
