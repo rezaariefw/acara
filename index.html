@@ -524,6 +524,36 @@
   .mini-modal-icon{ font-size:2.4rem; margin-bottom:10px; }
   .mini-modal-text{ font-size:.98rem; line-height:1.6; margin-bottom:18px; color:var(--ink); font-weight:600; }
 
+  /* ---- Lightbox foto galeri ---- */
+  .lightbox{
+    position:fixed; inset:0; z-index:30; display:flex; align-items:center; justify-content:center;
+    background:rgba(20,16,14,.88); opacity:0; pointer-events:none; transition:opacity .25s ease; padding:20px;
+  }
+  .lightbox.show{ opacity:1; pointer-events:auto; }
+  .lightbox-content{ display:flex; flex-direction:column; align-items:center; max-width:min(90vw, 480px); }
+  .lightbox-img{
+    max-width:100%; max-height:70vh; border-radius:12px;
+    box-shadow:0 20px 50px rgba(0,0,0,.5); object-fit:contain;
+  }
+  .lightbox-caption{
+    color:#FFF6E8; font-size:.92rem; font-weight:600; text-align:center; margin-top:12px;
+    text-shadow:0 1px 4px rgba(0,0,0,.5);
+  }
+  .lightbox-close{
+    position:absolute; top:18px; right:18px; width:38px; height:38px; border-radius:50%;
+    border:none; background:rgba(255,255,255,.15); color:#fff; font-size:1.1rem; cursor:pointer;
+  }
+  .lightbox-nav{
+    position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
+    border:none; background:rgba(255,255,255,.15); color:#fff; font-size:1.6rem; cursor:pointer;
+  }
+  .lightbox-prev{ left:14px; }
+  .lightbox-next{ right:14px; }
+  .lightbox-counter{
+    position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+    color:#fff; font-family:'Space Mono', monospace; font-size:.8rem; opacity:.85;
+  }
+
   .cp-panel-card .eyebrow{ margin-bottom:6px; }
   .cp-panel-card h3{ font-size:1.3rem; margin-bottom:12px; }
   .cp-panel-card p{ font-size:.95rem; line-height:1.7; margin-bottom:10px; opacity:.85; }
@@ -590,10 +620,17 @@
     color:var(--rose-dk); font-size:.66rem; padding:6px; font-family:'Space Mono', monospace;
   }
   .cp-gallery .photo-slot{
-    border:2px solid rgba(74,63,59,.15); background:none; padding:0; overflow:hidden;
+    border:2px solid rgba(74,63,59,.15); background:none; padding:0; overflow:hidden; cursor:pointer;
+    position:relative;
   }
   .cp-gallery .photo-slot img{
     width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .photo-caption{
+    position:absolute; left:0; right:0; bottom:0; padding:4px 6px 3px;
+    background:linear-gradient(0deg, rgba(0,0,0,.6), transparent);
+    color:#fff; font-size:.55rem; line-height:1.2; text-align:left;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
 
   /* ---- Tic-Tac-Toe ---- */
@@ -1149,6 +1186,17 @@
       <button class="btn-primary" id="jogjaNoteOk">Oke, Siap!</button>
     </div>
   </div>
+
+  <div id="photoLightbox" class="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">✕</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Sebelumnya">‹</button>
+    <div class="lightbox-content">
+      <img id="lightboxImg" class="lightbox-img" src="" alt="Foto kenangan diperbesar">
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+    </div>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Berikutnya">›</button>
+    <p class="lightbox-counter" id="lightboxCounter"></p>
+  </div>
 </section>
 <script>
 (function(){
@@ -1407,8 +1455,25 @@
       'foto-1.jpeg', 'foto-2.JPG', 'foto-3.jpeg', 'foto-4.jpeg', 'foto-5.jpeg',
       'foto-6.jpeg', 'foto-7.jpeg', 'foto-8.jpeg', 'foto-9.jpeg', 'foto-10.jpeg', 'foto-11.jpeg'
     ];
-    var slots = files.map(function(f){
-      return '<div class="slot photo-slot"><img src="' + f + '" alt="Foto kenangan" loading="lazy"></div>';
+    // GANTI teks di bawah ini sesuai isi foto masing-masing ya
+    var captions = [
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami',
+      'Momen kebersamaan kami'
+    ];
+    var slots = files.map(function(f, i){
+      return '<div class="slot photo-slot" data-i="' + i + '" title="' + captions[i] + '">' +
+             '<img src="' + f + '" alt="' + captions[i] + '" loading="lazy">' +
+             '<span class="photo-caption">' + captions[i] + '</span>' +
+             '</div>';
     }).join('');
     cpPanelBody.innerHTML =
       '<button class="menu-back" id="menuBack">← Kembali</button>' +
@@ -1416,6 +1481,37 @@
       '<h3>Beberapa Potret Kami</h3>' +
       '<div class="gallery cp-gallery">' + slots + '</div>';
     document.getElementById('menuBack').addEventListener('click', renderPerjalananMenu);
+
+    cpPanelBody.querySelectorAll('.photo-slot').forEach(function(slot){
+      slot.addEventListener('click', function(){ openLightbox(files, captions, parseInt(slot.dataset.i, 10)); });
+    });
+  }
+
+  // ---- Lightbox: preview foto galeri lebih besar + navigasi ----
+  function openLightbox(files, captions, index){
+    var lb = document.getElementById('photoLightbox');
+    var img = document.getElementById('lightboxImg');
+    var counter = document.getElementById('lightboxCounter');
+    var caption = document.getElementById('lightboxCaption');
+    function show(){
+      img.src = files[index];
+      caption.textContent = captions[index] || '';
+      counter.textContent = (index + 1) + ' / ' + files.length;
+    }
+    show();
+    lb.classList.add('show');
+
+    document.getElementById('lightboxPrev').onclick = function(){
+      index = (index - 1 + files.length) % files.length; show();
+    };
+    document.getElementById('lightboxNext').onclick = function(){
+      index = (index + 1) % files.length; show();
+    };
+    document.getElementById('lightboxClose').onclick = closeLightbox;
+    lb.onclick = function(e){ if (e.target === lb) closeLightbox(); };
+  }
+  function closeLightbox(){
+    document.getElementById('photoLightbox').classList.remove('show');
   }
 
   // ---- Menu: Mini Game -> pilih Tic-Tac-Toe / Tangkap Hati ----
