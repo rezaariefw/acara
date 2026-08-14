@@ -1392,19 +1392,33 @@
   var introBgm = document.getElementById('introBgm');
   var introMusicToggle = document.getElementById('introMusicToggle');
   var introMusicOn = false;
+
+  function tryPlayIntroBgm(){
+    introBgm.play().then(function(){
+      introMusicOn = true;
+      introMusicToggle.textContent = '🔊';
+    }).catch(function(){
+      introMusicOn = false;
+      introMusicToggle.textContent = '🔈';
+    });
+  }
+  // coba auto-nyala begitu halaman kebuka
+  tryPlayIntroBgm();
+  // kalau diblokir browser (autoplay policy), nyala begitu user pertama kali sentuh/klik apapun
+  ['click', 'touchstart', 'keydown'].forEach(function(evt){
+    document.addEventListener(evt, function firstInteract(){
+      if (!introMusicOn && !introDone) tryPlayIntroBgm();
+      document.removeEventListener(evt, firstInteract);
+    }, { once:true });
+  });
+
   introMusicToggle.addEventListener('click', function(){
     if (introMusicOn){
       introBgm.pause();
       introMusicOn = false;
       introMusicToggle.textContent = '🔈';
     } else {
-      introBgm.play().then(function(){
-        introMusicOn = true;
-        introMusicToggle.textContent = '🔊';
-      }).catch(function(){
-        introMusicToggle.textContent = '⚠️';
-        setTimeout(function(){ introMusicToggle.textContent = '🔈'; }, 1200);
-      });
+      tryPlayIntroBgm();
     }
   });
 
@@ -1580,10 +1594,20 @@
   function startHold(dir){ holdDir = dir; }
   function stopHold(dir){ if (holdDir === dir) holdDir = 0; }
 
+  var bgmWasPlaying = false;
   function openPanel(index){
     if (index === 5){
       openMazeScene();
       return; // halaman penuh sendiri, bukan modal cpPanel
+    }
+    // biar musik latar (bgm.mp3) ngga bentrok sama musik khusus Perjalanan 10 Tahun / Reza & Sofi
+    if (index === 2 || index === 3){
+      if (musicOn){
+        bgm.pause();
+        musicOn = false;
+        musicToggle.textContent = '🔈';
+        bgmWasPlaying = true;
+      }
     }
     if (index === 1){
       renderAcaraGame();
@@ -1606,6 +1630,13 @@
     if (perjalananMusicOn){
       perjalananBgm.pause();
       perjalananMusicOn = false;
+    }
+    if (bgmWasPlaying){
+      bgm.play().then(function(){
+        musicOn = true;
+        musicToggle.textContent = '🔊';
+      }).catch(function(){});
+      bgmWasPlaying = false;
     }
   }
 
@@ -3356,7 +3387,16 @@
   }
 
   // Klik langsung di sosok Reza atau Sofi buka konten masing-masing
+  function pauseBgmForRezaSofi(){
+    if (musicOn){
+      bgm.pause();
+      musicOn = false;
+      musicToggle.textContent = '🔈';
+      bgmWasPlaying = true;
+    }
+  }
   document.getElementById('npcRezaFigure').addEventListener('click', function(){
+    pauseBgmForRezaSofi();
     var sofiSound = document.getElementById('sofiClickSound');
     sofiSound.currentTime = 0;
     sofiSound.play().catch(function(){});
@@ -3366,6 +3406,7 @@
     markCheckpointVisited(3);
   });
   document.getElementById('npcSofiFigure').addEventListener('click', function(){
+    pauseBgmForRezaSofi();
     var sofiSound = document.getElementById('sofiClickSound');
     sofiSound.currentTime = 0;
     sofiSound.play().catch(function(){}); // diem aja kalau browser block atau filenya belum ada
