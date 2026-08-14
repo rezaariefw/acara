@@ -317,8 +317,8 @@
   .walker-name.left{ right:100%; margin-right:6px; }
   .walker-name.right{ left:100%; margin-left:6px; }
 
-  .checkpoint.cp-npc{ image-rendering:pixelated; bottom:34px; }
-  .checkpoint.cp-npc svg{ width:80px; height:104px; shape-rendering:crispEdges; display:block; overflow:visible; }
+  .checkpoint.cp-npc{ image-rendering:pixelated; bottom:34px; z-index:8; }
+  .checkpoint.cp-npc svg{ width:96px; height:125px; shape-rendering:crispEdges; display:block; overflow:visible; }
   .npc-figure{
     cursor:pointer;
     animation:npcGlow 1.6s ease-in-out infinite;
@@ -1557,10 +1557,13 @@
   function checkProximity(){
     var nearest = null;
     checkpoints.forEach(function(cp){
+      var idx = parseInt(cp.dataset.index, 10);
       var x = parseFloat(cp.dataset.x);
       var inRange = Math.abs(playerX - x) < 55;
       cp.classList.toggle('inrange', inRange);
-      if (inRange) nearest = cp;
+      // checkpoint Reza & Sofi (index 3) udah bisa diklik langsung di sosoknya,
+      // jadi ga perlu tombol "Lihat Detail" lagi
+      if (inRange && idx !== 3) nearest = cp;
     });
     activeCp = nearest;
     interactBtn.classList.toggle('show', !!nearest);
