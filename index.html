@@ -318,7 +318,16 @@
   .walker-name.right{ left:100%; margin-left:6px; }
 
   .checkpoint.cp-npc{ image-rendering:pixelated; bottom:34px; }
-  .checkpoint.cp-npc svg{ width:80px; height:104px; shape-rendering:crispEdges; display:block; }
+  .checkpoint.cp-npc svg{ width:80px; height:104px; shape-rendering:crispEdges; display:block; overflow:visible; }
+  .npc-figure{
+    cursor:pointer;
+    animation:npcGlow 1.6s ease-in-out infinite;
+  }
+  .npc-figure:hover{ opacity:.85; }
+  @keyframes npcGlow{
+    0%, 100%{ filter:drop-shadow(0 0 1px rgba(217,169,103,.3)) drop-shadow(0 0 1px rgba(217,169,103,.3)); }
+    50%{ filter:drop-shadow(0 0 5px rgba(217,169,103,.95)) drop-shadow(0 0 9px rgba(217,169,103,.7)); }
+  }
   .npc-label{
     position:absolute; top:8px;
     font-family:'Space Mono', monospace; font-weight:700; font-size:.6rem;
@@ -628,6 +637,37 @@
     background:none; border:none; color:var(--sage-dk); font-weight:700; font-size:.85rem;
     margin-bottom:10px; cursor:pointer; font-family:inherit; padding:0;
   }
+
+  /* ---- Amplop & surat "Awal Mula Bertemu" ---- */
+  .envelope-btn{
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    width:100%; max-width:260px; margin:16px auto 6px; background:none; border:none; cursor:pointer;
+    animation:envelopeFloat 3s ease-in-out infinite;
+  }
+  .envelope-btn svg{ width:100%; filter:drop-shadow(0 8px 16px rgba(74,63,59,.25)); }
+  .envelope-btn:active svg{ transform:scale(.97); }
+  .envelope-hint{
+    font-family:'Space Mono', monospace; font-size:.78rem; font-weight:700; color:var(--sage-dk);
+  }
+  @keyframes envelopeFloat{
+    0%, 100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); }
+  }
+  .letter-paper{
+    background:#FFFBF2; border-radius:4px; padding:22px 20px;
+    box-shadow:0 10px 26px rgba(74,63,59,.15), inset 0 0 0 1px rgba(139,111,71,.15);
+    animation:letterUnfold .4s ease both;
+  }
+  @keyframes letterUnfold{ from{ opacity:0; transform:translateY(10px) scale(.97); } to{ opacity:1; transform:translateY(0) scale(1); } }
+  .letter-paper p{ line-height:1.75; margin-bottom:12px; }
+  .letter-edit-note{
+    font-size:.74rem; color:var(--rose-dk); opacity:.8; font-style:italic;
+  }
+  .letter-photo-btn{
+    display:block; margin:6px auto 0; padding:9px 18px; border-radius:24px;
+    border:2px solid var(--ink); background:#FBF2E4; font-weight:700; font-size:.82rem;
+    cursor:pointer; color:var(--ink);
+  }
+  .letter-photo-btn:active{ transform:scale(.96); }
 
   .cp-gallery{ display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:6px; }
   .cp-gallery .slot{
@@ -1189,7 +1229,7 @@
         <div class="npc-label right">Sofi</div>
         <svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg">
           <!-- Reza (bapak) -->
-          <g>
+          <g id="npcRezaFigure" class="npc-figure">
             <rect x="4" y="6" width="8" height="8" fill="#9C9690"/>
             <rect x="3" y="14" width="10" height="14" fill="#E08A3E"/>
             <rect x="4" y="28" width="4" height="8" fill="#4A3F3B"/>
@@ -1198,7 +1238,7 @@
           <!-- clasped hands -->
           <rect x="14" y="18" width="6" height="4" fill="#D9A967"/>
           <!-- Sofi (ibu) -->
-          <g>
+          <g id="npcSofiFigure" class="npc-figure" style="animation-delay:.4s;">
             <rect x="21" y="6" width="8" height="8" fill="#9C9690"/>
             <rect x="20" y="14" width="10" height="16" fill="#E8DCC0"/>
             <rect x="21" y="30" width="4" height="6" fill="#4A3F3B"/>
@@ -1514,6 +1554,8 @@
       renderAcaraGame();
     } else if (index === 2){
       renderPerjalananMenu();
+    } else if (index === 3){
+      renderRezaSofiMenu();
     } else if (index === 4){
       renderMiniGameMenu();
     } else {
@@ -1523,6 +1565,37 @@
   }
   function closePanel(){ cpPanel.classList.remove('show'); checkProximity(); }
 
+  // ---- Menu kecil: pilih mau baca surat Reza atau ucapan Sofi ----
+  function renderRezaSofiMenu(){
+    cpPanelBody.innerHTML =
+      '<p class="eyebrow">Reza &amp; Sofi</p>' +
+      '<h3>Mau Baca yang Mana?</h3>' +
+      '<div class="menu-list">' +
+        '<button class="menu-row" data-target="suratreza">' +
+          '<span class="menu-ico">💌</span>' +
+          '<span class="menu-txt"><span class="menu-title">Surat dari Reza</span><span class="menu-sub">Awal mula Ayah & Ibu bertemu</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="ucapansofi">' +
+          '<span class="menu-ico">🤍</span>' +
+          '<span class="menu-txt"><span class="menu-title">Ucapan dari Sofi</span><span class="menu-sub">Untuk Clemira & Kinza</span></span>' +
+        '</button>' +
+      '</div>';
+    cpPanelBody.querySelectorAll('.menu-row').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if (btn.dataset.target === 'suratreza'){
+          awalMulaBackTo = renderRezaSofiMenu;
+          renderAwalMulaEnvelope();
+        } else {
+          showThankYouNote();
+        }
+      });
+    });
+  }
+
+  function showThankYouNote(){
+    cpPanelBody.innerHTML = cpContent[3];
+  }
+
   // ---- Menu: Perjalanan 10 Tahun -> pilih Kisah Kami / Galeri Foto ----
   function renderPerjalananMenu(){
     cpPanelBody.innerHTML =
@@ -1530,6 +1603,10 @@
       '<h3>Ada yang mau dilihat?</h3>' +
       '<p style="margin-bottom:14px;">Pilih salah satu buat lihat lebih detail.</p>' +
       '<div class="menu-list">' +
+        '<button class="menu-row" data-target="awalmula">' +
+          '<span class="menu-ico">💌</span>' +
+          '<span class="menu-txt"><span class="menu-title">Awal Mula Bertemu</span><span class="menu-sub">Buka surat kenangannya</span></span>' +
+        '</button>' +
         '<button class="menu-row" data-target="kisah">' +
           '<span class="menu-ico">📖</span>' +
           '<span class="menu-txt"><span class="menu-title">Kisah Kami</span><span class="menu-sub">Bagaimana semuanya bermula</span></span>' +
@@ -1542,9 +1619,58 @@
 
     cpPanelBody.querySelectorAll('.menu-row').forEach(function(btn){
       btn.addEventListener('click', function(){
-        if (btn.dataset.target === 'kisah') renderKisahKami();
+        if (btn.dataset.target === 'awalmula'){
+          awalMulaBackTo = renderPerjalananMenu;
+          renderAwalMulaEnvelope();
+        }
+        else if (btn.dataset.target === 'kisah') renderKisahKami();
         else renderGaleriFoto();
       });
+    });
+  }
+
+  // ---- Amplop: Awal Mula Bertemu (ketuk amplop buat buka suratnya) ----
+  var awalMulaBackTo = renderPerjalananMenu;
+
+  function renderAwalMulaEnvelope(){
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<p class="eyebrow">Awal Mula Bertemu</p>' +
+      '<h3>Ada Surat Buat Kamu</h3>' +
+      '<button class="envelope-btn" id="envelopeBtn" aria-label="Buka surat">' +
+        '<svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">' +
+          '<rect x="4" y="4" width="232" height="152" rx="10" fill="#F3E7D0" stroke="#8B6F47" stroke-width="4"/>' +
+          '<polyline points="6,6 120,92 234,6" fill="none" stroke="#8B6F47" stroke-width="3"/>' +
+          '<polyline points="6,154 98,92" fill="none" stroke="#8B6F47" stroke-width="3"/>' +
+          '<polyline points="234,154 142,92" fill="none" stroke="#8B6F47" stroke-width="3"/>' +
+          '<path d="M120,68 C112,54 90,58 90,76 C90,96 120,116 120,116 C120,120 150,96 150,76 C150,58 128,54 120,68 Z" fill="#C0392B" stroke="#7A1F1F" stroke-width="2"/>' +
+        '</svg>' +
+        '<span class="envelope-hint">Ketuk untuk membuka ✨</span>' +
+      '</button>';
+    document.getElementById('menuBack').addEventListener('click', function(){ awalMulaBackTo(); });
+    document.getElementById('envelopeBtn').addEventListener('click', renderAwalMulaLetter);
+  }
+
+  function renderAwalMulaLetter(){
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<div class="letter-paper">' +
+        '<p class="eyebrow">Awal Mula Bertemu</p>' +
+        '<h3 style="font-style:italic;">Dari Mana Semua Ini Dimulai</h3>' +
+        '<p>Ayah dan Ibu satu kelompok saat ospek, kelompok 15. Hari pertama ospek, Ayah nanya di grup ' +
+        '"pada dimana?" Terus Ibu jawab "pohon deket lift" — Ayah sama Ibu nggak saling kenal, Ibu jawab ' +
+        'cuma seadanya aja di grup tanpa tahu kalau itu Ayah.</p>' +
+        '<p>Hari kedua ospek, Ayah mindahin tas Ibu ke bangku paling ujung saat Ibu ke toilet. Ibu marah ' +
+        'saat tau tasnya dipindahin. Ibu nanya ke temen "siapa nih yang pindahin tas gue?" Temen Ibu ' +
+        'jawab "tuh Reza, bukan gue" — terus Ibu marah ke Ayah. Ayah mau pindahin lagi ke tempat awal, ' +
+        'tapi kata Ibu nggak usah karena udah terlanjur kesal.</p>' +
+        '<p>Dari situlah Ayah kenal Ibu. Ayah gangguin Ibu terus sepanjang ospek.</p>' +
+        '<button class="letter-photo-btn" id="letterPhotoBtn">📷 Lihat Foto</button>' +
+        '<p style="text-align:right; font-style:italic; margin-top:16px;">— Ayah 🤍</p>' +
+      '</div>';
+    document.getElementById('menuBack').addEventListener('click', renderAwalMulaEnvelope);
+    document.getElementById('letterPhotoBtn').addEventListener('click', function(){
+      openLightbox(['foto-awal-mula.jpg'], ['Awal mula Ayah & Ibu bertemu, saat ospek'], 0);
     });
   }
 
@@ -1572,7 +1698,7 @@
       '2017 — Ngajak Ibu ke tempat yang belum pernah ia kunjungi',
       '2018 — Naik bianglala di Aeon pertama kali',
       '2019 — Pertemuan keluarga',
-      '2020 — Lamaran, prewedding, dan menikah',
+      '2020 — Prewedding, menikah, honeymoon ke Jogja',
       '2021 — Menyambut kelahiran Clemira',
       '2022 — Merayakan ulang tahun Cley yang pertama',
       '2023 — Ke Jogja pertama kali bertiga',
@@ -3142,16 +3268,33 @@
     var idx = parseInt(activeCp.dataset.index, 10);
     openPanel(idx);
     interactBtn.classList.remove('show');
-    if (!visited[idx]){
-      visited[idx] = true;
-      activeCp.classList.add('visited');
-      var li = missionList.querySelector('li[data-cp="' + idx + '"]');
-      if (li) li.classList.add('done');
-      heartCount.textContent = Object.keys(visited).length;
-    }
+    markCheckpointVisited(idx);
   });
   cpClose.addEventListener('click', closePanel);
   cpPanel.addEventListener('click', function(e){ if (e.target === cpPanel) closePanel(); });
+
+  function markCheckpointVisited(idx){
+    if (visited[idx]) return;
+    visited[idx] = true;
+    var cpEl = checkpoints.filter(function(cp){ return parseInt(cp.dataset.index, 10) === idx; })[0];
+    if (cpEl) cpEl.classList.add('visited');
+    var li = missionList.querySelector('li[data-cp="' + idx + '"]');
+    if (li) li.classList.add('done');
+    heartCount.textContent = Object.keys(visited).length;
+  }
+
+  // Klik langsung di sosok Reza atau Sofi buka konten masing-masing
+  document.getElementById('npcRezaFigure').addEventListener('click', function(){
+    awalMulaBackTo = renderRezaSofiMenu;
+    renderAwalMulaEnvelope();
+    cpPanel.classList.add('show');
+    markCheckpointVisited(3);
+  });
+  document.getElementById('npcSofiFigure').addEventListener('click', function(){
+    showThankYouNote();
+    cpPanel.classList.add('show');
+    markCheckpointVisited(3);
+  });
 
   document.getElementById('mazeExitBtn').addEventListener('click', closeMazeScene);
   document.getElementById('mazeRetryBtn').addEventListener('click', startMaze);
