@@ -329,14 +329,16 @@
   .npc-label.right{ left:100%; margin-left:6px; }
 
   .marker{
-    position:absolute; bottom:78px;
-    font-family:'Space Mono', monospace; font-size:.62rem; font-weight:700;
-    color:var(--rose-dk); opacity:0; transform:translateY(6px) scale(.6);
+    position:absolute; bottom:78px; z-index:3;
+    font-family:'Space Mono', monospace; font-size:.62rem; font-weight:800;
+    color:var(--ink); opacity:0; transform:translateY(6px) scale(.6);
     transition:opacity .4s ease, transform .4s ease;
     text-align:center;
+    background:#FBF2E4; border:1.5px solid var(--ink); border-radius:6px;
+    padding:2px 5px; box-shadow:0 2px 0 rgba(74,63,59,.18);
   }
   .marker.on{ opacity:1; transform:translateY(0) scale(1); }
-  .marker .heart{ display:block; font-size:.9rem; line-height:1; }
+  .marker .heart{ display:block; font-size:.95rem; line-height:1.2; color:var(--rose-dk); }
 
   .intro-copy{
     position:relative; z-index:5; text-align:center; color:#FFF6E8;
@@ -596,6 +598,20 @@
   }
   @keyframes fadeUpSm{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
+  /* ---- Tarik Garis ---- */
+  .linematch-wrap{
+    position:relative; display:flex; justify-content:space-between;
+    padding:6px 18px; margin:12px 0; min-height:280px; touch-action:none;
+  }
+  .linematch-svg{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .linematch-col{ display:flex; flex-direction:column; gap:14px; z-index:2; }
+  .linematch-node{
+    min-width:56px; height:42px; padding:0 10px; border-radius:10px; border:2px solid var(--ink);
+    background:#fff; font-size:1.15rem; font-weight:700; cursor:grab; touch-action:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .linematch-node.matched{ background:#DCF0D8; cursor:default; opacity:.85; }
+
   .menu-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:6px; }
   .menu-row{
     display:flex; align-items:center; gap:14px; text-align:left; width:100%;
@@ -697,10 +713,14 @@
     display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; max-width:180px; margin:14px auto;
   }
   .simon-btn{
-    aspect-ratio:1/1; border-radius:14px; border:2px solid var(--ink); cursor:pointer; opacity:.55;
-    transition:opacity .15s ease, transform .15s ease;
+    aspect-ratio:1/1; border-radius:14px; border:2px solid var(--ink); cursor:pointer; opacity:.5;
+    transition:opacity .15s ease, transform .15s ease, filter .15s ease, box-shadow .15s ease;
+    filter:saturate(.7) brightness(.95);
   }
-  .simon-btn.lit{ opacity:1; transform:scale(1.05); }
+  .simon-btn.lit{
+    opacity:1; transform:scale(1.08); filter:saturate(1.8) brightness(1.25);
+    box-shadow:0 0 0 3px #fff, 0 0 18px 6px rgba(255,255,255,.55);
+  }
   .simon-rose{ background:var(--rose); }
   .simon-sage{ background:var(--sage); }
   .simon-gold{ background:var(--gold); }
@@ -732,6 +752,51 @@
     aspect-ratio:1/1; border-radius:16px; border:3px solid var(--ink); cursor:pointer;
   }
   .color-swatch:active{ transform:scale(.94); }
+
+  /* ---- Labirin: halaman penuh (background sama kayak explore) ---- */
+  #mazeScene{
+    position:fixed; inset:0; z-index:85; display:none; overflow:hidden;
+    background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-bot) 100%);
+  }
+  #mazeScene.show{ display:block; }
+  #mazeScene .hill-back{ bottom:96px; }
+  #mazeScene .hill-front{ bottom:64px; }
+  #mazeScene .merapi-smoke{ bottom:374px; }
+  #mazeScene .sun{ top:30%; }
+
+  .maze-exit-btn{
+    position:absolute; top:16px; left:16px; z-index:10; background:#FBF2E4; border:2px solid var(--ink);
+    border-radius:30px; padding:9px 16px; font-weight:700; font-size:.82rem; cursor:pointer;
+    box-shadow:0 4px 0 rgba(74,63,59,.18);
+  }
+  .maze-page-wrap{
+    position:relative; z-index:5; height:100%; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; padding:70px 16px 20px;
+  }
+  .maze-title{ font-family:'Fraunces', serif; font-size:1.4rem; margin-bottom:14px; text-align:center; color:var(--ink); }
+  .maze-grid-big{
+    display:grid; gap:0; width:min(88vw, 460px); aspect-ratio:1/1; margin-bottom:16px;
+    background:#FFF6E8; border:3px solid var(--ink); border-radius:10px; overflow:hidden;
+    box-shadow:0 14px 32px rgba(74,63,59,.2);
+  }
+  .maze-cell-big{
+    display:flex; align-items:center; justify-content:center; box-sizing:border-box; padding:2px;
+  }
+  .maze-controls-big{
+    display:grid; grid-template-columns:repeat(3, 56px); grid-template-rows:repeat(2, 56px);
+    gap:8px; justify-content:center; margin-bottom:10px;
+  }
+  .maze-btn-big{
+    width:56px; height:56px; font-size:1.5rem; border-radius:14px; border:2px solid var(--ink);
+    background:#FBF2E4; cursor:pointer; box-shadow:0 4px 0 rgba(74,63,59,.18);
+  }
+  .maze-btn-big:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(74,63,59,.18); }
+  .maze-status-big{
+    font-weight:700; text-align:center; color:var(--ink); margin-bottom:10px;
+    text-shadow:0 1px 4px rgba(255,255,255,.6);
+  }
+  .maze-retry-btn{ display:none; }
+  .maze-retry-btn.show{ display:inline-block; }
 
   @media (max-width:560px){
     .mission-box{ max-width:170px; padding:9px 12px; }
@@ -1001,10 +1066,11 @@
         <li data-cp="2"><span class="chk"></span> Lihat perjalanan 10 tahun</li>
         <li data-cp="4"><span class="chk"></span> Main mini game</li>
         <li data-cp="3"><span class="chk"></span> Temui Reza & Sofi</li>
+        <li data-cp="5"><span class="chk"></span> Cari jalan di labirin</li>
       </ul>
     </div>
     <div class="hud-right">
-      <div class="heart-counter">♥ <span id="heartCount">0</span>/5</div>
+      <div class="heart-counter">♥ <span id="heartCount">0</span>/6</div>
       <button class="music-toggle" id="musicToggle" title="Nyala/matikan musik" aria-label="Nyala/matikan musik">🔈</button>
     </div>
   </div>
@@ -1141,6 +1207,18 @@
         </svg>
       </div>
 
+      <div class="checkpoint" data-index="5" data-x="2300" style="left:2300px;">
+        <div class="cp-bubble">!</div>
+        <div class="cp-sign">
+          <svg class="cp-gunungan" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M20,1 L23,9 L29,6 L26,14 L33,15 L27,21 L33,28 L25,27 L26,36 L19,31 L12,36 L13,27 L5,28 L11,21 L5,15 L12,14 L9,6 L15,9 Z
+                     M20,31 C16,34 14,40 14,46 L26,46 C26,40 24,34 20,31 Z" fill="var(--ink)"/>
+          </svg>
+          <br>Labirin
+        </div>
+        <div class="cp-post"></div>
+      </div>
+
       <div class="expl-walker" id="exploWalker" aria-hidden="true">
         <div class="walker-name left" id="walkerNameLeft">Clemira</div>
         <div class="walker-name right" id="walkerNameRight">Kinza</div>
@@ -1197,6 +1275,34 @@
     </div>
     <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Berikutnya">›</button>
     <p class="lightbox-counter" id="lightboxCounter"></p>
+  </div>
+</section>
+
+<!-- ============ LABIRIN: halaman penuh, background sama kayak jalur explore ============ -->
+<section id="mazeScene" aria-label="Labirin Clemira dan Kinza">
+  <div class="expl-backdrop">
+    <div class="sun"></div>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+    <div class="cloud cloud4"></div>
+    <div class="hill-back"></div>
+    <div class="merapi-smoke"></div>
+    <div class="hill-front"></div>
+  </div>
+  <button class="maze-exit-btn" id="mazeExitBtn">← Kembali ke Jalan</button>
+  <div class="maze-page-wrap">
+    <p class="eyebrow" style="text-align:center;">Labirin</p>
+    <h2 class="maze-title">Cari Jalan Sampai ke 💝</h2>
+    <div class="maze-grid-big" id="mazeGridBig"></div>
+    <div class="maze-controls-big">
+      <div></div><button class="maze-btn-big" data-d="up">↑</button><div></div>
+      <button class="maze-btn-big" data-d="left">←</button>
+      <button class="maze-btn-big" data-d="down">↓</button>
+      <button class="maze-btn-big" data-d="right">→</button>
+    </div>
+    <p class="maze-status-big" id="mazeStatusBig"></p>
+    <button class="btn-primary maze-retry-btn" id="mazeRetryBtn">Main Lagi</button>
   </div>
 </section>
 <script>
@@ -1400,6 +1506,10 @@
   function stopHold(dir){ if (holdDir === dir) holdDir = 0; }
 
   function openPanel(index){
+    if (index === 5){
+      openMazeScene();
+      return; // halaman penuh sendiri, bukan modal cpPanel
+    }
     if (index === 1){
       renderAcaraGame();
     } else if (index === 2){
@@ -1521,61 +1631,7 @@
       '<p class="eyebrow">Mini Game</p>' +
       '<h3>Mau Main Apa?</h3>' +
       '<p style="margin-bottom:14px;">Iseng-iseng dulu sebelum lanjut jalan ⤵</p>' +
-      '<div class="menu-list">' +
-        '<button class="menu-row" data-target="ttt">' +
-          '<span class="menu-ico">⭕</span>' +
-          '<span class="menu-txt"><span class="menu-title">Tic-Tac-Toe</span><span class="menu-sub">Hati vs Bintang, lawan komputer</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="catch">' +
-          '<span class="menu-ico">💕</span>' +
-          '<span class="menu-txt"><span class="menu-title">Tangkap Hati</span><span class="menu-sub">Tap hati yang jatuh, kumpulin skor</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="quiz">' +
-          '<span class="menu-ico">📅</span>' +
-          '<span class="menu-txt"><span class="menu-title">Tebak Tanggal</span><span class="menu-sub">Kuis seputar cerita Ayah & Ibu</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="slide">' +
-          '<span class="menu-ico">🧩</span>' +
-          '<span class="menu-txt"><span class="menu-title">Puzzle Geser</span><span class="menu-sub">Susun ulang angka 1-8</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="lovequiz">' +
-          '<span class="menu-ico">💌</span>' +
-          '<span class="menu-txt"><span class="menu-title">Kuis Cinta</span><span class="menu-sub">Pertanyaan seru, jawab sesukamu</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="whack">' +
-          '<span class="menu-ico">🦋</span>' +
-          '<span class="menu-txt"><span class="menu-title">Suit Ketangkasan</span><span class="menu-sub">Tap kupu-kupu yang muncul cepat</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="rps">' +
-          '<span class="menu-ico">✊</span>' +
-          '<span class="menu-txt"><span class="menu-title">Batu Gunting Kertas</span><span class="menu-sub">Lawan komputer, best of the day</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="wheel">' +
-          '<span class="menu-ico">🎡</span>' +
-          '<span class="menu-txt"><span class="menu-title">Roda Keberuntungan</span><span class="menu-sub">Putar & dapatkan kejutan kecil</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="simon">' +
-          '<span class="menu-ico">🧠</span>' +
-          '<span class="menu-txt"><span class="menu-title">Ingat Pola</span><span class="menu-sub">Hafalin & ulangi urutan warnanya</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="guess">' +
-          '<span class="menu-ico">🔢</span>' +
-          '<span class="menu-txt"><span class="menu-title">Tebak Angka</span><span class="menu-sub">Angka 1-20, dikasih hint</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="coin">' +
-          '<span class="menu-ico">🪙</span>' +
-          '<span class="menu-txt"><span class="menu-title">Tebak Koin</span><span class="menu-sub">Angka atau gambar?</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="reflex">' +
-          '<span class="menu-ico">⚡</span>' +
-          '<span class="menu-txt"><span class="menu-title">Uji Refleks</span><span class="menu-sub">Tap secepat mungkin pas ijo</span></span>' +
-        '</button>' +
-        '<button class="menu-row" data-target="scramble">' +
-          '<span class="menu-ico">🔤</span>' +
-          '<span class="menu-txt"><span class="menu-title">Susun Huruf</span><span class="menu-sub">Tebak nama dari huruf acak</span></span>' +
-        '</button>' +
-      '</div>' +
-      '<p class="eyebrow" style="margin-top:16px;">Buat Adik-Adik 🧸</p>' +
+      '<p class="eyebrow">Buat Adik-Adik 🧸</p>' +
       '<div class="menu-list">' +
         '<button class="menu-row" data-target="addition">' +
           '<span class="menu-ico">➕</span>' +
@@ -1593,11 +1649,86 @@
           '<span class="menu-ico">🔡</span>' +
           '<span class="menu-txt"><span class="menu-title">Urutan Angka</span><span class="menu-sub">Tap 1,2,3... berurutan</span></span>' +
         '</button>' +
+        '<button class="menu-row" data-target="objmatch">' +
+          '<span class="menu-ico">🧸</span>' +
+          '<span class="menu-txt"><span class="menu-title">Mencocokkan Objek</span><span class="menu-sub">Cocokkan pasangan gambar</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="linematch">' +
+          '<span class="menu-ico">🖇️</span>' +
+          '<span class="menu-txt"><span class="menu-title">Tarik Garis</span><span class="menu-sub">Hubungkan gambar sama namanya</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="snake">' +
+          '<span class="menu-ico">🐍</span>' +
+          '<span class="menu-txt"><span class="menu-title">Ular Lapar</span><span class="menu-sub">Kumpulin makanan, jangan nabrak</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="coloring">' +
+          '<span class="menu-ico">🖍️</span>' +
+          '<span class="menu-txt"><span class="menu-title">Mewarnai</span><span class="menu-sub">Warnai gambar rumah & pohon</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="quiz">' +
+          '<span class="menu-ico">📅</span>' +
+          '<span class="menu-txt"><span class="menu-title">Tebak Tanggal</span><span class="menu-sub">Kuis seputar cerita Ayah & Ibu</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="wheel">' +
+          '<span class="menu-ico">🎡</span>' +
+          '<span class="menu-txt"><span class="menu-title">Roda Keberuntungan</span><span class="menu-sub">Putar & dapatkan kejutan kecil</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="simon">' +
+          '<span class="menu-ico">🧠</span>' +
+          '<span class="menu-txt"><span class="menu-title">Ingat Pola</span><span class="menu-sub">Hafalin & ulangi urutan warnanya</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="scramble">' +
+          '<span class="menu-ico">🔤</span>' +
+          '<span class="menu-txt"><span class="menu-title">Susun Huruf</span><span class="menu-sub">Tebak nama dari huruf acak</span></span>' +
+        '</button>' +
+      '</div>' +
+      '<p class="eyebrow" style="margin-top:16px;">Buat Semua Umur</p>' +
+      '<div class="menu-list">' +
+        '<button class="menu-row" data-target="ttt">' +
+          '<span class="menu-ico">⭕</span>' +
+          '<span class="menu-txt"><span class="menu-title">Tic-Tac-Toe</span><span class="menu-sub">Hati vs Bintang, lawan komputer</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="catch">' +
+          '<span class="menu-ico">💕</span>' +
+          '<span class="menu-txt"><span class="menu-title">Tangkap Hati</span><span class="menu-sub">Tap hati yang jatuh, kumpulin skor</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="slide">' +
+          '<span class="menu-ico">🧩</span>' +
+          '<span class="menu-txt"><span class="menu-title">Puzzle Geser</span><span class="menu-sub">Susun ulang angka 1-8</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="lovequiz">' +
+          '<span class="menu-ico">💌</span>' +
+          '<span class="menu-txt"><span class="menu-title">Kuis Cinta</span><span class="menu-sub">Pertanyaan seru, jawab sesukamu</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="whack">' +
+          '<span class="menu-ico">🦋</span>' +
+          '<span class="menu-txt"><span class="menu-title">Suit Ketangkasan</span><span class="menu-sub">Tap kupu-kupu yang muncul cepat</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="rps">' +
+          '<span class="menu-ico">✊</span>' +
+          '<span class="menu-txt"><span class="menu-title">Batu Gunting Kertas</span><span class="menu-sub">Lawan komputer, best of the day</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="guess">' +
+          '<span class="menu-ico">🔢</span>' +
+          '<span class="menu-txt"><span class="menu-title">Tebak Angka</span><span class="menu-sub">Angka 1-20, dikasih hint</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="coin">' +
+          '<span class="menu-ico">🪙</span>' +
+          '<span class="menu-txt"><span class="menu-title">Tebak Koin</span><span class="menu-sub">Angka atau gambar?</span></span>' +
+        '</button>' +
+        '<button class="menu-row" data-target="reflex">' +
+          '<span class="menu-ico">⚡</span>' +
+          '<span class="menu-txt"><span class="menu-title">Uji Refleks</span><span class="menu-sub">Tap secepat mungkin pas ijo</span></span>' +
+        '</button>' +
       '</div>';
     cpPanelBody.querySelectorAll('.menu-row').forEach(function(btn){
       btn.addEventListener('click', function(){
         var target = btn.dataset.target;
         if (target === 'ttt') renderTicTacToe();
+        else if (target === 'objmatch') renderObjectMatch();
+        else if (target === 'linematch') renderLineMatch();
+        else if (target === 'snake') renderSnakeGame();
+        else if (target === 'coloring') renderColoring();
         else if (target === 'catch') renderCatchHearts();
         else if (target === 'quiz') renderDateQuiz();
         else if (target === 'slide') renderSlidePuzzle();
@@ -1700,6 +1831,339 @@
       else if (w === '♥') status.textContent = 'Kamu menang! 🎉';
       else status.textContent = 'Komputer menang, coba lagi!';
     }
+  }
+
+  // ---- Game: Mencocokkan Objek (memory match generik) ----
+  function renderObjectMatch(){
+    var icons = ['🐶','🐱','🐰','🐻','🦊','🐼'];
+    var deck = icons.concat(icons).map(function(ic, i){ return { id:i, icon:ic }; });
+    shuffleArr(deck);
+
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<p class="eyebrow">Mencocokkan Objek</p>' +
+      '<h3>Cocokkan Semua Pasangan</h3>' +
+      '<div class="memory-grid" id="objGrid" style="grid-template-columns:repeat(4, 1fr);"></div>' +
+      '<p class="ttt-status" id="objStatus">Tap 2 kartu buat mencocokkan</p>';
+    document.getElementById('menuBack').addEventListener('click', renderMiniGameMenu);
+
+    var grid = document.getElementById('objGrid');
+    var status = document.getElementById('objStatus');
+    var flipped = [];
+    var matchedCount = 0;
+    var lock = false;
+
+    deck.forEach(function(card){
+      var el = document.createElement('button');
+      el.className = 'mem-card';
+      el.dataset.icon = card.icon;
+      el.innerHTML = '<span class="mem-face mem-back">?</span><span class="mem-face mem-front">' + card.icon + '</span>';
+      el.addEventListener('click', function(){
+        if (lock || el.classList.contains('flipped') || el.classList.contains('matched')) return;
+        el.classList.add('flipped');
+        flipped.push(el);
+        if (flipped.length === 2){
+          lock = true;
+          var a = flipped[0], b = flipped[1];
+          if (a.dataset.icon === b.dataset.icon){
+            setTimeout(function(){
+              a.classList.add('matched'); b.classList.add('matched');
+              flipped = []; lock = false; matchedCount++;
+              if (matchedCount === icons.length){
+                status.textContent = '🎉 Semua kecocokan ketemu!';
+                var retry = document.createElement('button');
+                retry.className = 'btn-primary'; retry.style.marginTop = '10px';
+                retry.textContent = 'Main Lagi';
+                retry.addEventListener('click', renderObjectMatch);
+                cpPanelBody.appendChild(retry);
+              }
+            }, 350);
+          } else {
+            setTimeout(function(){
+              a.classList.remove('flipped'); b.classList.remove('flipped');
+              flipped = []; lock = false;
+            }, 700);
+          }
+        }
+      });
+      grid.appendChild(el);
+    });
+  }
+
+  // ---- Game: Tarik Garis (drag garis buat hubungkan gambar & nama) ----
+  function renderLineMatch(){
+    var pairs = [
+      { key:'apel', icon:'🍎', word:'Apel' },
+      { key:'kucing', icon:'🐱', word:'Kucing' },
+      { key:'mobil', icon:'🚗', word:'Mobil' },
+      { key:'bulan', icon:'🌙', word:'Bulan' },
+      { key:'bintang', icon:'⭐', word:'Bintang' },
+      { key:'balon', icon:'🎈', word:'Balon' }
+    ];
+    var leftOrder = shuffleArr(pairs.slice());
+    var rightOrder = shuffleArr(pairs.slice());
+    var matchedCount = 0;
+
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<p class="eyebrow">Tarik Garis</p>' +
+      '<h3>Hubungkan Gambar & Namanya</h3>' +
+      '<p style="margin-bottom:8px;">Tahan lalu tarik dari gambar ke nama yang cocok</p>' +
+      '<div class="linematch-wrap" id="lineMatchWrap">' +
+        '<svg class="linematch-svg" id="lineMatchSvg"></svg>' +
+        '<div class="linematch-col" id="lmLeft"></div>' +
+        '<div class="linematch-col" id="lmRight"></div>' +
+      '</div>' +
+      '<p class="ttt-status" id="lineMatchStatus"></p>';
+    document.getElementById('menuBack').addEventListener('click', renderMiniGameMenu);
+
+    var wrap = document.getElementById('lineMatchWrap');
+    var svg = document.getElementById('lineMatchSvg');
+    var leftCol = document.getElementById('lmLeft');
+    var rightCol = document.getElementById('lmRight');
+    var status = document.getElementById('lineMatchStatus');
+
+    leftOrder.forEach(function(p){
+      var b = document.createElement('button');
+      b.className = 'linematch-node';
+      b.dataset.match = p.key;
+      b.dataset.side = 'left';
+      b.textContent = p.icon;
+      leftCol.appendChild(b);
+    });
+    rightOrder.forEach(function(p){
+      var b = document.createElement('button');
+      b.className = 'linematch-node';
+      b.dataset.match = p.key;
+      b.dataset.side = 'right';
+      b.textContent = p.word;
+      rightCol.appendChild(b);
+    });
+
+    function sizeSvg(){
+      svg.setAttribute('width', wrap.clientWidth);
+      svg.setAttribute('height', wrap.clientHeight);
+    }
+    sizeSvg();
+    window.addEventListener('resize', sizeSvg);
+
+    function centerOf(el){
+      var r = el.getBoundingClientRect();
+      var wr = wrap.getBoundingClientRect();
+      return { x: r.left + r.width / 2 - wr.left, y: r.top + r.height / 2 - wr.top };
+    }
+
+    var dragging = null;
+    var tempLine = null;
+
+    function startDrag(node, e){
+      if (node.classList.contains('matched')) return;
+      dragging = node;
+      var c = centerOf(node);
+      tempLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      tempLine.setAttribute('x1', c.x); tempLine.setAttribute('y1', c.y);
+      tempLine.setAttribute('x2', c.x); tempLine.setAttribute('y2', c.y);
+      tempLine.setAttribute('stroke', 'var(--sage-dk)');
+      tempLine.setAttribute('stroke-width', '3');
+      tempLine.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(tempLine);
+      e.preventDefault();
+    }
+
+    function moveDrag(clientX, clientY){
+      if (!dragging || !tempLine) return;
+      var wr = wrap.getBoundingClientRect();
+      tempLine.setAttribute('x2', clientX - wr.left);
+      tempLine.setAttribute('y2', clientY - wr.top);
+    }
+
+    function endDrag(clientX, clientY){
+      if (!dragging) return;
+      var target = document.elementFromPoint(clientX, clientY);
+      var targetNode = target && target.closest ? target.closest('.linematch-node') : null;
+      if (tempLine){ svg.removeChild(tempLine); tempLine = null; }
+
+      if (targetNode && targetNode !== dragging && targetNode.dataset.side !== dragging.dataset.side){
+        if (targetNode.dataset.match === dragging.dataset.match && !targetNode.classList.contains('matched')){
+          var c1 = centerOf(dragging), c2 = centerOf(targetNode);
+          var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', c1.x); line.setAttribute('y1', c1.y);
+          line.setAttribute('x2', c2.x); line.setAttribute('y2', c2.y);
+          line.setAttribute('stroke', '#7EC98A');
+          line.setAttribute('stroke-width', '4');
+          line.setAttribute('stroke-linecap', 'round');
+          svg.appendChild(line);
+          dragging.classList.add('matched');
+          targetNode.classList.add('matched');
+          matchedCount++;
+          if (matchedCount === pairs.length){
+            status.textContent = '🎉 Semua berhasil dihubungkan!';
+            var retry = document.createElement('button');
+            retry.className = 'btn-primary'; retry.style.marginTop = '10px';
+            retry.textContent = 'Main Lagi';
+            retry.addEventListener('click', renderLineMatch);
+            cpPanelBody.appendChild(retry);
+          }
+        } else {
+          status.textContent = 'Belum tepat, coba lagi ya 😊';
+        }
+      }
+      dragging = null;
+    }
+
+    wrap.querySelectorAll('.linematch-node').forEach(function(node){
+      node.addEventListener('mousedown', function(e){ startDrag(node, e); });
+      node.addEventListener('touchstart', function(e){ startDrag(node, e.touches[0]); }, { passive:false });
+    });
+    document.addEventListener('mousemove', function(e){ moveDrag(e.clientX, e.clientY); });
+    document.addEventListener('touchmove', function(e){
+      if (dragging) { moveDrag(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); }
+    }, { passive:false });
+    document.addEventListener('mouseup', function(e){ endDrag(e.clientX, e.clientY); });
+    document.addEventListener('touchend', function(e){
+      if (dragging){
+        var t = e.changedTouches[0];
+        endDrag(t.clientX, t.clientY);
+      }
+    });
+  }
+
+  // ---- Game: Ular Lapar (Snake sederhana pakai canvas) ----
+  function renderSnakeGame(){
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<p class="eyebrow">Ular Lapar</p>' +
+      '<h3>Skor: <span id="snakeScore">0</span></h3>' +
+      '<canvas id="snakeCanvas" width="280" height="280" style="display:block; margin:0 auto 10px; background:#FFF6E8; border:2px solid var(--ink); border-radius:10px;"></canvas>' +
+      '<div class="maze-controls-big" style="grid-template-columns:repeat(3, 48px); grid-template-rows:repeat(2, 48px);">' +
+        '<div></div><button class="maze-btn-big snake-btn" data-d="up" style="width:48px;height:48px;font-size:1.2rem;">↑</button><div></div>' +
+        '<button class="maze-btn-big snake-btn" data-d="left" style="width:48px;height:48px;font-size:1.2rem;">←</button>' +
+        '<button class="maze-btn-big snake-btn" data-d="down" style="width:48px;height:48px;font-size:1.2rem;">↓</button>' +
+        '<button class="maze-btn-big snake-btn" data-d="right" style="width:48px;height:48px;font-size:1.2rem;">→</button>' +
+      '</div>' +
+      '<p class="ttt-status" id="snakeStatus">Nabrak dinding tembus ke sisi lain, tapi jangan gigit badan sendiri!</p>';
+    document.getElementById('menuBack').addEventListener('click', function(){
+      clearInterval(snakeTimer);
+      renderMiniGameMenu();
+    });
+
+    var canvas = document.getElementById('snakeCanvas');
+    var ctx = canvas.getContext('2d');
+    var cell = 20, cols = 14, rows = 14;
+    var snake = [{ x:6, y:7 }, { x:5, y:7 }, { x:4, y:7 }];
+    var dir = { x:1, y:0 };
+    var pendingDir = { x:1, y:0 };
+    var food = randomFood();
+    var score = 0;
+    var running = true;
+
+    function randomFood(){
+      var pos;
+      do {
+        pos = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) };
+      } while (snake.some(function(s){ return s.x === pos.x && s.y === pos.y; }));
+      return pos;
+    }
+
+    function draw(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#E85D5D';
+      ctx.fillRect(food.x * cell + 2, food.y * cell + 2, cell - 4, cell - 4);
+      snake.forEach(function(s, i){
+        ctx.fillStyle = i === 0 ? '#5E7857' : '#93AD8C';
+        ctx.fillRect(s.x * cell + 1, s.y * cell + 1, cell - 2, cell - 2);
+      });
+    }
+
+    function tick(){
+      if (!running) return;
+      dir = pendingDir;
+      var head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      // tembus dinding: keluar satu sisi, muncul di sisi seberang
+      if (head.x < 0) head.x = cols - 1;
+      else if (head.x >= cols) head.x = 0;
+      if (head.y < 0) head.y = rows - 1;
+      else if (head.y >= rows) head.y = 0;
+
+      if (snake.some(function(s){ return s.x === head.x && s.y === head.y; })){
+        running = false;
+        clearInterval(snakeTimer);
+        document.getElementById('snakeStatus').textContent = '💥 Kena badan sendiri! Skor akhir: ' + score;
+        var retry = document.createElement('button');
+        retry.className = 'btn-primary'; retry.style.marginTop = '10px';
+        retry.textContent = 'Main Lagi';
+        retry.addEventListener('click', renderSnakeGame);
+        cpPanelBody.appendChild(retry);
+        return;
+      }
+      snake.unshift(head);
+      if (head.x === food.x && head.y === food.y){
+        score++;
+        document.getElementById('snakeScore').textContent = score;
+        food = randomFood();
+      } else {
+        snake.pop();
+      }
+      draw();
+    }
+
+    document.querySelectorAll('.snake-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var d = btn.dataset.d;
+        if (d === 'up' && dir.y === 0) pendingDir = { x:0, y:-1 };
+        else if (d === 'down' && dir.y === 0) pendingDir = { x:0, y:1 };
+        else if (d === 'left' && dir.x === 0) pendingDir = { x:-1, y:0 };
+        else if (d === 'right' && dir.x === 0) pendingDir = { x:1, y:0 };
+      });
+    });
+
+    draw();
+    var snakeTimer = setInterval(tick, 200);
+  }
+
+  // ---- Game: Mewarnai (klik area, isi warna pilihan) ----
+  function renderColoring(){
+    var palette = ['#E85D5D','#F0C64A','#7EC98A','#4A90D9','#E8829E','#A388D9','#E08A3E','#4A3F3B','#FFFFFF'];
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<p class="eyebrow">Mewarnai</p>' +
+      '<h3>Warnai Gambarnya!</h3>' +
+      '<svg id="coloringSvg" viewBox="0 0 200 160" style="width:100%; max-width:280px; display:block; margin:0 auto 12px; background:#FFF6E8; border-radius:12px; border:2px solid rgba(74,63,59,.15);">' +
+        '<circle class="color-region" data-part="sun" cx="165" cy="30" r="18" fill="#fff" stroke="var(--ink)" stroke-width="2"/>' +
+        '<rect class="color-region" data-part="ground" x="0" y="130" width="200" height="30" fill="#fff" stroke="var(--ink)" stroke-width="2"/>' +
+        '<circle class="color-region" data-part="treecrown" cx="40" cy="90" r="24" fill="#fff" stroke="var(--ink)" stroke-width="2"/>' +
+        '<rect class="color-region" data-part="treetrunk" x="34" y="112" width="12" height="24" fill="#fff" stroke="var(--ink)" stroke-width="2"/>' +
+        '<polygon class="color-region" data-part="roof" points="90,60 145,60 117,30" fill="#fff" stroke="var(--ink)" stroke-width="2"/>' +
+        '<rect class="color-region" data-part="wall" x="90" y="60" width="55" height="70" fill="#fff" stroke="var(--ink)" stroke-width="2"/>' +
+        '<rect class="color-region" data-part="door" x="108" y="100" width="16" height="30" fill="#fff" stroke="var(--ink)" stroke-width="2"/>' +
+        '<rect class="color-region" data-part="window" x="130" y="75" width="14" height="14" fill="#fff" stroke="var(--ink)" stroke-width="2"/>' +
+      '</svg>' +
+      '<div class="color-grid" id="paletteGrid" style="grid-template-columns:repeat(5, 1fr); max-width:220px;"></div>' +
+      '<button class="btn-primary" id="coloringReset" style="margin-top:12px;">Bersihkan</button>';
+    document.getElementById('menuBack').addEventListener('click', renderMiniGameMenu);
+
+    var currentColor = palette[0];
+    var paletteGrid = document.getElementById('paletteGrid');
+    palette.forEach(function(hex){
+      var sw = document.createElement('button');
+      sw.className = 'color-swatch';
+      sw.style.background = hex;
+      sw.style.border = hex === '#FFFFFF' ? '3px solid var(--ink)' : '3px solid rgba(74,63,59,.3)';
+      sw.addEventListener('click', function(){
+        currentColor = hex;
+        paletteGrid.querySelectorAll('.color-swatch').forEach(function(s){ s.style.outline = 'none'; });
+        sw.style.outline = '3px solid var(--sage-dk)';
+      });
+      paletteGrid.appendChild(sw);
+    });
+
+    document.querySelectorAll('.color-region').forEach(function(shape){
+      shape.style.cursor = 'pointer';
+      shape.addEventListener('click', function(){ shape.setAttribute('fill', currentColor); });
+    });
+    document.getElementById('coloringReset').addEventListener('click', function(){
+      document.querySelectorAll('.color-region').forEach(function(shape){ shape.setAttribute('fill', '#fff'); });
+    });
   }
 
   // ---- Game 2: Tangkap Hati (tap hati yang jatuh, 20 detik) ----
@@ -2086,8 +2550,8 @@
       btn.classList.add('lit');
       setTimeout(function(){
         btn.classList.remove('lit');
-        setTimeout(cb, 200);
-      }, 450);
+        setTimeout(cb, 400);
+      }, 650);
     }
 
     function playSequence(){
@@ -2473,6 +2937,124 @@
     });
   }
 
+  // ---- Game 18: Labirin (maze 7x7, cari jalan ke tujuan) ----
+  // ---- Labirin (halaman penuh, karakter Clemira & Kinza, background sama kayak jalan) ----
+  var COUPLE_SVG_SMALL =
+    '<svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">' +
+      '<g transform="translate(8,36) scale(1.18) translate(-8,-36)">' +
+        '<rect x="4" y="6" width="8" height="8" fill="#4A3F3B"/>' +
+        '<rect x="3" y="14" width="10" height="14" fill="#E8829E"/>' +
+        '<rect x="4" y="28" width="4" height="8" fill="#4A3F3B"/>' +
+        '<rect x="9" y="28" width="4" height="8" fill="#7a5b47"/>' +
+      '</g>' +
+      '<rect x="14" y="18" width="6" height="4" fill="#D9A967"/>' +
+      '<g>' +
+        '<rect x="21" y="4" width="8" height="8" fill="#4A3F3B"/>' +
+        '<rect x="20" y="12" width="10" height="16" fill="#4A90D9"/>' +
+        '<rect x="21" y="28" width="4" height="8" fill="#4A3F3B"/>' +
+        '<rect x="26" y="28" width="4" height="8" fill="#5E7857"/>' +
+      '</g>' +
+    '</svg>';
+
+  function openMazeScene(){
+    document.getElementById('mazeScene').classList.add('show');
+    startMaze();
+  }
+  function closeMazeScene(){
+    document.getElementById('mazeScene').classList.remove('show');
+  }
+
+  function startMaze(){
+    var N = 9;
+    var cells = [];
+    for (var r = 0; r < N; r++){
+      var row = [];
+      for (var c = 0; c < N; c++){
+        row.push({ top:true, right:true, bottom:true, left:true, visited:false });
+      }
+      cells.push(row);
+    }
+
+    function carve(r, c){
+      cells[r][c].visited = true;
+      var dirs = shuffleArr([
+        { dr:-1, dc:0, self:'top', other:'bottom' },
+        { dr:1, dc:0, self:'bottom', other:'top' },
+        { dr:0, dc:-1, self:'left', other:'right' },
+        { dr:0, dc:1, self:'right', other:'left' }
+      ]);
+      dirs.forEach(function(d){
+        var nr = r + d.dr, nc = c + d.dc;
+        if (nr >= 0 && nr < N && nc >= 0 && nc < N && !cells[nr][nc].visited){
+          cells[r][c][d.self] = false;
+          cells[nr][nc][d.other] = false;
+          carve(nr, nc);
+        }
+      });
+    }
+    carve(0, 0);
+
+    var playerR = 0, playerC = 0;
+    var goalR = N - 1, goalC = N - 1;
+
+    var grid = document.getElementById('mazeGridBig');
+    var status = document.getElementById('mazeStatusBig');
+    status.textContent = 'Ayo cari jalan keluarnya!';
+    grid.innerHTML = '';
+    grid.style.gridTemplateColumns = 'repeat(' + N + ', 1fr)';
+    var cellEls = [];
+
+    for (var r2 = 0; r2 < N; r2++){
+      var rowEls = [];
+      for (var c2 = 0; c2 < N; c2++){
+        var el = document.createElement('div');
+        el.className = 'maze-cell-big';
+        var cell = cells[r2][c2];
+        if (cell.top) el.style.borderTop = '3px solid var(--ink)';
+        if (cell.right) el.style.borderRight = '3px solid var(--ink)';
+        if (cell.bottom) el.style.borderBottom = '3px solid var(--ink)';
+        if (cell.left) el.style.borderLeft = '3px solid var(--ink)';
+        grid.appendChild(el);
+        rowEls.push(el);
+      }
+      cellEls.push(rowEls);
+    }
+    cellEls[goalR][goalC].innerHTML = '<span style="font-size:1.3rem;">💝</span>';
+
+    function renderPlayer(){
+      cellEls.forEach(function(row, r3){ row.forEach(function(el, c3){
+        if (!(r3 === goalR && c3 === goalC)) el.innerHTML = '';
+      }); });
+      if (playerR === goalR && playerC === goalC){
+        cellEls[playerR][playerC].innerHTML = '<span style="font-size:1.3rem;">🎉</span>';
+      } else {
+        cellEls[playerR][playerC].innerHTML = COUPLE_SVG_SMALL;
+      }
+    }
+    renderPlayer();
+
+    function tryMove(dir){
+      var cell = cells[playerR][playerC];
+      if (dir === 'up' && !cell.top){ playerR--; }
+      else if (dir === 'down' && !cell.bottom){ playerR++; }
+      else if (dir === 'left' && !cell.left){ playerC--; }
+      else if (dir === 'right' && !cell.right){ playerC++; }
+      else { status.textContent = 'Ada dinding, coba arah lain ya 😊'; return; }
+      renderPlayer();
+      if (playerR === goalR && playerC === goalC){
+        status.textContent = '🎉 Sampai tujuan! Clemira & Kinza berhasil!';
+        document.getElementById('mazeRetryBtn').classList.add('show');
+      } else {
+        status.textContent = 'Terus jalan, kalian pasti bisa!';
+      }
+    }
+
+    document.querySelectorAll('.maze-btn-big').forEach(function(btn){
+      btn.onclick = function(){ tryMove(btn.dataset.d); };
+    });
+    document.getElementById('mazeRetryBtn').classList.remove('show');
+  }
+
   // ---- Mini game: cocokkan kartu buat buka detail acara satu-satu ----
   function renderAcaraGame(){
     var pairs = [
@@ -2570,6 +3152,9 @@
   });
   cpClose.addEventListener('click', closePanel);
   cpPanel.addEventListener('click', function(e){ if (e.target === cpPanel) closePanel(); });
+
+  document.getElementById('mazeExitBtn').addEventListener('click', closeMazeScene);
+  document.getElementById('mazeRetryBtn').addEventListener('click', startMaze);
 
   var jogjaNoteModal = document.getElementById('jogjaNoteModal');
   function closeJogjaNote(){ jogjaNoteModal.classList.remove('show'); }
