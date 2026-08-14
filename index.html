@@ -798,6 +798,16 @@
   }
   .color-swatch:active{ transform:scale(.94); }
 
+  /* ---- Lengkapi Kata ---- */
+  .wordfill-row{ display:flex; justify-content:center; gap:6px; margin:10px 0; }
+  .wordfill-box{
+    width:38px; height:44px; border:2px solid var(--ink); border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem; font-weight:800; background:#fff; text-transform:uppercase;
+  }
+  .wordfill-box.blank{ background:#F2E7D5; border-style:dashed; }
+  .wordfill-box.filled{ background:#DCF0D8; border-color:#7EC98A; }
+
   /* ---- Labirin: halaman penuh (background sama kayak explore) ---- */
   #mazeScene{
     position:fixed; inset:0; z-index:85; display:none; overflow:hidden;
@@ -1892,6 +1902,10 @@
           '<span class="menu-ico">🔡</span>' +
           '<span class="menu-txt"><span class="menu-title">Urutan Angka</span><span class="menu-sub">Tap 1,2,3... berurutan</span></span>' +
         '</button>' +
+        '<button class="menu-row" data-target="wordfill">' +
+          '<span class="menu-ico">✏️</span>' +
+          '<span class="menu-txt"><span class="menu-title">Lengkapi Kata</span><span class="menu-sub">Ada 1 huruf yang hilang</span></span>' +
+        '</button>' +
         '<button class="menu-row" data-target="objmatch">' +
           '<span class="menu-ico">🧸</span>' +
           '<span class="menu-txt"><span class="menu-title">Mencocokkan Objek</span><span class="menu-sub">Cocokkan pasangan gambar</span></span>' +
@@ -1991,7 +2005,8 @@
         else if (target === 'addition') renderAddition();
         else if (target === 'counting') renderCounting();
         else if (target === 'colors') renderColorGuess();
-        else renderNumberOrder();
+        else if (target === 'order') renderNumberOrder();
+        else renderWordFill();
       });
     });
   }
@@ -3022,7 +3037,7 @@
     cpPanelBody.innerHTML =
       '<button class="menu-back" id="menuBack">← Kembali</button>' +
       '<p class="eyebrow">Tambah-tambahan</p>' +
-      '<h3 style="font-size:2rem;">' + '🍎'.repeat(a) + ' + ' + '🍎'.repeat(b) + ' = ?</h3>' +
+      '<h3 style="font-size:2rem;">' + a + ' + ' + b + ' = ?</h3>' +
       '<div class="rps-row" id="addOpts" style="margin-top:14px;"></div>' +
       '<p class="ttt-status" id="addStatus"></p>';
     document.getElementById('menuBack').addEventListener('click', renderMiniGameMenu);
@@ -3060,7 +3075,7 @@
 
   // ---- Game 15: Hitung Gambar (buat adik-adik) ----
   function renderCounting(){
-    var icons = ['⭐','🐣','🎈','🦋'];
+    var icons = ['⭐','🐣','🎈','🦋','🍎'];
     var icon = icons[Math.floor(Math.random() * icons.length)];
     var count = 3 + Math.floor(Math.random() * 6); // 3-8
     var options = shuffleArr([count, count + 1, Math.max(1, count - 1)]);
@@ -3181,6 +3196,80 @@
         }
       });
       grid.appendChild(cell);
+    });
+  }
+
+  // ---- Game: Lengkapi Kata (1 huruf hilang, pilih jawaban yang benar) ----
+  function renderWordFill(level){
+    level = level || 1;
+    var words = [
+      { word:'BUKU', icon:'📚' },
+      { word:'SAPU', icon:'🧹' },
+      { word:'KURSI', icon:'🪑' },
+      { word:'MOBIL', icon:'🚗' },
+      { word:'BOLA', icon:'⚽' },
+      { word:'TEKO', icon:'🫖' },
+      { word:'GELAS', icon:'🥛' },
+      { word:'IKAN', icon:'🐟' },
+      { word:'TOPI', icon:'🎩' },
+      { word:'JAM', icon:'⏰' },
+      { word:'PISANG', icon:'🍌' },
+      { word:'AYAM', icon:'🐔' },
+      { word:'RUMAH', icon:'🏠' },
+      { word:'PAYUNG', icon:'☂️' },
+      { word:'SEPATU', icon:'👟' },
+      { word:'KUCING', icon:'🐱' },
+      { word:'ANJING', icon:'🐶' },
+      { word:'PENSIL', icon:'✏️' }
+    ];
+    var pick = words[Math.floor(Math.random() * words.length)];
+    // level 1: huruf pertama yang hilang. level 2+: posisi acak
+    var missingIndex = level === 1 ? 0 : Math.floor(Math.random() * pick.word.length);
+    var correctLetter = pick.word[missingIndex];
+
+    // bikin 2 huruf pengecoh yang beda dari huruf benar
+    var allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    var distractors = shuffleArr(allLetters.filter(function(l){ return l !== correctLetter; })).slice(0, 2);
+    var options = shuffleArr([correctLetter].concat(distractors));
+
+    var boxesHtml = pick.word.split('').map(function(ch, i){
+      return '<span class="wordfill-box' + (i === missingIndex ? ' blank' : '') + '" id="wfBox' + i + '">' +
+             (i === missingIndex ? '' : ch) + '</span>';
+    }).join('');
+
+    cpPanelBody.innerHTML =
+      '<button class="menu-back" id="menuBack">← Kembali</button>' +
+      '<p class="eyebrow">Lengkapi Kata — Level ' + level + '</p>' +
+      '<h3>Huruf Apa yang Hilang?</h3>' +
+      '<p style="font-size:3rem; margin-bottom:8px;">' + pick.icon + '</p>' +
+      '<div class="wordfill-row">' + boxesHtml + '</div>' +
+      '<div class="rps-row" id="wfOpts" style="margin-top:16px;"></div>' +
+      '<p class="ttt-status" id="wfStatus"></p>';
+    document.getElementById('menuBack').addEventListener('click', renderMiniGameMenu);
+
+    var opts = document.getElementById('wfOpts');
+    var status = document.getElementById('wfStatus');
+    options.forEach(function(letter){
+      var btn = document.createElement('button');
+      btn.className = 'rps-btn';
+      btn.style.width = '52px'; btn.style.height = '52px'; btn.style.fontSize = '1.3rem';
+      btn.textContent = letter;
+      btn.addEventListener('click', function(){
+        if (letter === correctLetter){
+          document.getElementById('wfBox' + missingIndex).textContent = correctLetter;
+          document.getElementById('wfBox' + missingIndex).classList.remove('blank');
+          document.getElementById('wfBox' + missingIndex).classList.add('filled');
+          status.textContent = '🎉 Benar! Ini "' + pick.word + '"';
+          var next = document.createElement('button');
+          next.className = 'btn-primary'; next.style.marginTop = '10px';
+          next.textContent = 'Level ' + (level + 1) + ' →';
+          next.addEventListener('click', function(){ renderWordFill(level + 1); });
+          cpPanelBody.appendChild(next);
+        } else {
+          status.textContent = 'Coba lagi ya! 😊';
+        }
+      });
+      opts.appendChild(btn);
     });
   }
 
