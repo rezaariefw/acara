@@ -1681,10 +1681,6 @@
       '<h3>Ada yang mau dilihat?</h3>' +
       '<p style="margin-bottom:14px;">Pilih salah satu buat lihat lebih detail.</p>' +
       '<div class="menu-list">' +
-        '<button class="menu-row" data-target="awalmula">' +
-          '<span class="menu-ico">💌</span>' +
-          '<span class="menu-txt"><span class="menu-title">Awal Mula Bertemu</span><span class="menu-sub">Buka surat kenangannya</span></span>' +
-        '</button>' +
         '<button class="menu-row" data-target="kisah">' +
           '<span class="menu-ico">📖</span>' +
           '<span class="menu-txt"><span class="menu-title">Kisah Kami</span><span class="menu-sub">Bagaimana semuanya bermula</span></span>' +
@@ -1722,18 +1718,14 @@
 
     cpPanelBody.querySelectorAll('.menu-row').forEach(function(btn){
       btn.addEventListener('click', function(){
-        if (btn.dataset.target === 'awalmula'){
-          awalMulaBackTo = renderPerjalananMenu;
-          renderAwalMulaEnvelope();
-        }
-        else if (btn.dataset.target === 'kisah') renderKisahKami();
+        if (btn.dataset.target === 'kisah') renderKisahKami();
         else renderGaleriFoto();
       });
     });
   }
 
   // ---- Amplop: Awal Mula Bertemu (ketuk amplop buat buka suratnya) ----
-  var awalMulaBackTo = renderPerjalananMenu;
+  var awalMulaBackTo = renderRezaSofiMenu;
 
   function renderAwalMulaEnvelope(){
     cpPanelBody.innerHTML =
