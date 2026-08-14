@@ -430,6 +430,7 @@
     display:flex; align-items:center; justify-content:center; font-size:1.05rem; cursor:pointer;
   }
   .music-toggle:active{ transform:translateY(3px); box-shadow:0 3px 0 rgba(74,63,59,.18); }
+  .intro-music-toggle{ position:absolute; top:16px; right:16px; z-index:10; }
 
   .expl-viewport{ position:absolute; inset:0; overflow:hidden; }
   .expl-track{
@@ -567,6 +568,10 @@
   }
 
   .cp-panel-card .eyebrow{ margin-bottom:6px; }
+  .panel-music-row{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;
+  }
+  .panel-music-row .music-toggle{ width:32px; height:32px; font-size:.9rem; }
   .cp-panel-card h3{ font-size:1.3rem; margin-bottom:12px; }
   .cp-panel-card p{ font-size:.95rem; line-height:1.7; margin-bottom:10px; opacity:.85; }
   .cp-panel-card .map-btn{ margin-top:8px; }
@@ -961,6 +966,8 @@
 
 <!-- ============ INTRO: pixel-art walk through 10 tahun ============ -->
 <div id="intro" role="dialog" aria-label="Halaman pembuka undangan">
+  <button class="music-toggle intro-music-toggle" id="introMusicToggle" title="Nyala/matikan musik" aria-label="Nyala/matikan musik">🔈</button>
+  <audio id="introBgm" src="intro-bgm.mp3" loop preload="none"></audio>
   <div class="sun"></div>
   <div class="cloud cloud1"></div>
   <div class="cloud cloud2"></div>
@@ -1117,6 +1124,8 @@
 
   <!-- Taruh file musik lo sendiri di sini dengan nama bgm.mp3 (satu folder sama index.html) -->
   <audio id="bgm" src="bgm.mp3" loop preload="none"></audio>
+  <audio id="sofiClickSound" src="sofi-click.mp3" preload="none"></audio>
+  <audio id="perjalananBgm" src="perjalanan-bgm.mp3" loop preload="none"></audio>
 
   <div class="expl-viewport">
     <div class="expl-track" id="exploreTrack">
@@ -1379,11 +1388,37 @@
     });
   }, 220);
 
+  // ============ MUSIK INTRO: nyala/matikan (butuh file intro-bgm.mp3, beda dari bgm.mp3) ============
+  var introBgm = document.getElementById('introBgm');
+  var introMusicToggle = document.getElementById('introMusicToggle');
+  var introMusicOn = false;
+  introMusicToggle.addEventListener('click', function(){
+    if (introMusicOn){
+      introBgm.pause();
+      introMusicOn = false;
+      introMusicToggle.textContent = '🔈';
+    } else {
+      introBgm.play().then(function(){
+        introMusicOn = true;
+        introMusicToggle.textContent = '🔊';
+      }).catch(function(){
+        introMusicToggle.textContent = '⚠️';
+        setTimeout(function(){ introMusicToggle.textContent = '🔈'; }, 1200);
+      });
+    }
+  });
+
   openBtn.addEventListener('click', function(){
     intro.classList.add('hide');
     introDone = true;
     document.title = 'Reza & Sofi — 10 Tahun Bersama';
     setTimeout(function(){ intro.style.display = 'none'; }, 950);
+
+    // matiin lagu intro (kalau nyala), lanjut ke lagu explore
+    if (introMusicOn){
+      introBgm.pause();
+      introMusicOn = false;
+    }
 
     // coba autoplay musik begitu user klik (klik ini terhitung "gesture" jadi browser izinin)
     bgm.play().then(function(){
@@ -1563,7 +1598,16 @@
     }
     cpPanel.classList.add('show');
   }
-  function closePanel(){ cpPanel.classList.remove('show'); checkProximity(); }
+  var perjalananBgm = document.getElementById('perjalananBgm');
+  var perjalananMusicOn = false;
+  function closePanel(){
+    cpPanel.classList.remove('show');
+    checkProximity();
+    if (perjalananMusicOn){
+      perjalananBgm.pause();
+      perjalananMusicOn = false;
+    }
+  }
 
   // ---- Menu kecil: pilih mau baca surat Reza atau ucapan Sofi ----
   function renderRezaSofiMenu(){
@@ -1599,7 +1643,10 @@
   // ---- Menu: Perjalanan 10 Tahun -> pilih Kisah Kami / Galeri Foto ----
   function renderPerjalananMenu(){
     cpPanelBody.innerHTML =
-      '<p class="eyebrow">Perjalanan 10 Tahun</p>' +
+      '<div class="panel-music-row">' +
+        '<p class="eyebrow" style="margin-bottom:0;">Perjalanan 10 Tahun</p>' +
+        '<button class="music-toggle" id="perjalananMusicToggle" title="Nyala/matikan musik" aria-label="Nyala/matikan musik">🔈</button>' +
+      '</div>' +
       '<h3>Ada yang mau dilihat?</h3>' +
       '<p style="margin-bottom:14px;">Pilih salah satu buat lihat lebih detail.</p>' +
       '<div class="menu-list">' +
@@ -1616,6 +1663,31 @@
           '<span class="menu-txt"><span class="menu-title">Galeri Foto</span><span class="menu-sub">Beberapa potret kami</span></span>' +
         '</button>' +
       '</div>';
+
+    var pjToggle = document.getElementById('perjalananMusicToggle');
+    pjToggle.textContent = perjalananMusicOn ? '🔊' : '🔈';
+    pjToggle.addEventListener('click', function(){
+      if (perjalananMusicOn){
+        perjalananBgm.pause();
+        perjalananMusicOn = false;
+        pjToggle.textContent = '🔈';
+      } else {
+        perjalananBgm.play().then(function(){
+          perjalananMusicOn = true;
+          pjToggle.textContent = '🔊';
+        }).catch(function(){
+          pjToggle.textContent = '⚠️';
+          setTimeout(function(){ pjToggle.textContent = '🔈'; }, 1200);
+        });
+      }
+    });
+    // coba autoplay begitu menu ini dibuka (dipicu oleh klik "Lihat Detail", terhitung gesture)
+    if (!perjalananMusicOn){
+      perjalananBgm.play().then(function(){
+        perjalananMusicOn = true;
+        pjToggle.textContent = '🔊';
+      }).catch(function(){});
+    }
 
     cpPanelBody.querySelectorAll('.menu-row').forEach(function(btn){
       btn.addEventListener('click', function(){
@@ -3285,12 +3357,18 @@
 
   // Klik langsung di sosok Reza atau Sofi buka konten masing-masing
   document.getElementById('npcRezaFigure').addEventListener('click', function(){
+    var sofiSound = document.getElementById('sofiClickSound');
+    sofiSound.currentTime = 0;
+    sofiSound.play().catch(function(){});
     awalMulaBackTo = renderRezaSofiMenu;
     renderAwalMulaEnvelope();
     cpPanel.classList.add('show');
     markCheckpointVisited(3);
   });
   document.getElementById('npcSofiFigure').addEventListener('click', function(){
+    var sofiSound = document.getElementById('sofiClickSound');
+    sofiSound.currentTime = 0;
+    sofiSound.play().catch(function(){}); // diem aja kalau browser block atau filenya belum ada
     showThankYouNote();
     cpPanel.classList.add('show');
     markCheckpointVisited(3);
