@@ -1126,6 +1126,8 @@
   <audio id="bgm" src="bgm.mp3" loop preload="none"></audio>
   <audio id="sofiClickSound" src="sofi-click.mp3" preload="none"></audio>
   <audio id="perjalananBgm" src="perjalanan-bgm.mp3" loop preload="none"></audio>
+  <audio id="acaraBgm" src="acara-bgm.mp3" loop preload="none"></audio>
+  <audio id="minigameBgm" src="minigame-bgm.mp3" loop preload="none"></audio>
 
   <div class="expl-viewport">
     <div class="expl-track" id="exploreTrack">
@@ -1600,8 +1602,8 @@
       openMazeScene();
       return; // halaman penuh sendiri, bukan modal cpPanel
     }
-    // biar musik latar (bgm.mp3) ngga bentrok sama musik khusus Perjalanan 10 Tahun / Reza & Sofi
-    if (index === 2 || index === 3){
+    // biar musik latar (bgm.mp3) ngga bentrok sama musik khusus tiap checkpoint
+    if (index === 1 || index === 2 || index === 3 || index === 4){
       if (musicOn){
         bgm.pause();
         musicOn = false;
@@ -1630,6 +1632,19 @@
     if (perjalananMusicOn){
       perjalananBgm.pause();
       perjalananMusicOn = false;
+    }
+    if (acaraMusicOn){
+      acaraBgm.pause();
+      acaraMusicOn = false;
+    }
+    if (minigameMusicOn){
+      minigameBgm.pause();
+      minigameMusicOn = false;
+    }
+    var sofiSound = document.getElementById('sofiClickSound');
+    if (sofiSound && !sofiSound.paused){
+      sofiSound.pause();
+      sofiSound.currentTime = 0;
     }
     if (bgmWasPlaying){
       bgm.play().then(function(){
@@ -1849,7 +1864,10 @@
   // ---- Menu: Mini Game -> pilih Tic-Tac-Toe / Tangkap Hati ----
   function renderMiniGameMenu(){
     cpPanelBody.innerHTML =
-      '<p class="eyebrow">Mini Game</p>' +
+      '<div class="panel-music-row">' +
+        '<p class="eyebrow" style="margin-bottom:0;">Mini Game</p>' +
+        '<button class="music-toggle" id="minigameMusicToggle" title="Nyala/matikan musik" aria-label="Nyala/matikan musik">🔈</button>' +
+      '</div>' +
       '<h3>Mau Main Apa?</h3>' +
       '<p style="margin-bottom:14px;">Iseng-iseng dulu sebelum lanjut jalan ⤵</p>' +
       '<p class="eyebrow">Buat Adik-Adik 🧸</p>' +
@@ -1942,6 +1960,10 @@
           '<span class="menu-txt"><span class="menu-title">Uji Refleks</span><span class="menu-sub">Tap secepat mungkin pas ijo</span></span>' +
         '</button>' +
       '</div>';
+
+    setupPanelMusic(minigameBgm, 'minigameMusicToggle',
+      function(v){ minigameMusicOn = v; }, function(){ return minigameMusicOn; });
+
     cpPanelBody.querySelectorAll('.menu-row').forEach(function(btn){
       btn.addEventListener('click', function(){
         var target = btn.dataset.target;
@@ -3277,6 +3299,37 @@
   }
 
   // ---- Mini game: cocokkan kartu buat buka detail acara satu-satu ----
+  // ---- Helper generik: pasang tombol musik + autoplay + toggle buat panel manapun ----
+  function setupPanelMusic(audioEl, toggleId, stateSetter, stateGetter){
+    var toggle = document.getElementById(toggleId);
+    toggle.textContent = stateGetter() ? '🔊' : '🔈';
+    toggle.addEventListener('click', function(){
+      if (stateGetter()){
+        audioEl.pause();
+        stateSetter(false);
+        toggle.textContent = '🔈';
+      } else {
+        audioEl.play().then(function(){
+          stateSetter(true);
+          toggle.textContent = '🔊';
+        }).catch(function(){
+          toggle.textContent = '⚠️';
+          setTimeout(function(){ toggle.textContent = '🔈'; }, 1200);
+        });
+      }
+    });
+    if (!stateGetter()){
+      audioEl.play().then(function(){
+        stateSetter(true);
+        toggle.textContent = '🔊';
+      }).catch(function(){});
+    }
+  }
+  var acaraBgm = document.getElementById('acaraBgm');
+  var acaraMusicOn = false;
+  var minigameBgm = document.getElementById('minigameBgm');
+  var minigameMusicOn = false;
+
   function renderAcaraGame(){
     var pairs = [
       { key:'tanggal', icon:'📅', detail:'Selasa, 1 September 2026' },
@@ -3291,12 +3344,18 @@
     }
 
     cpPanelBody.innerHTML =
-      '<p class="eyebrow">Papan Acara</p>' +
+      '<div class="panel-music-row">' +
+        '<p class="eyebrow" style="margin-bottom:0;">Papan Acara</p>' +
+        '<button class="music-toggle" id="acaraMusicToggle" title="Nyala/matikan musik" aria-label="Nyala/matikan musik">🔈</button>' +
+      '</div>' +
       '<h3>Yuk, Clemira & Kinza!</h3>' +
       '<p style="margin-bottom:12px;">Ayah dan Ibu mau ngajak kalian jalan-jalan rayain anniversary. ' +
       'Cocokkan kartunya biar kalian tau kita mau kemana ⤵</p>' +
       '<div class="memory-grid" id="memoryGrid"></div>' +
       '<div class="acara-reveal" id="acaraReveal"></div>';
+
+    setupPanelMusic(acaraBgm, 'acaraMusicToggle',
+      function(v){ acaraMusicOn = v; }, function(){ return acaraMusicOn; });
 
     var grid = document.getElementById('memoryGrid');
     var reveal = document.getElementById('acaraReveal');
